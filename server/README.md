@@ -1,6 +1,6 @@
-#Server de Productos Farmaceuticos
+# Server de Productos Farmaceuticos
 
-###Primero
+### Primero
 - Instalar: npm 6.2.0
 - Instalar mysql: npm install mysql2
 - Correr en mysql (usuario root contraseña root por defecto):
@@ -8,14 +8,14 @@
 create database PharmaProducts;
 ~~~
 
-###Para correr:
+### Para correr:
 ~~~bash
 	npm install
 	npm run migrate
 	npm start
 ~~~
 
-###Para agregar Tablas y Recursos:
+### Para agregar Tablas y Recursos:
 ~~~bash
 	node_modules/.bin/sequelize model:create --name User --attributes username:string
 ~~~
