@@ -20,4 +20,4 @@ Para agregar Tablas:
 	node_modules/.bin/sequelize model:create --name User --attributes username:string
 ~~~
 
-Y crear router y controller yp por ultimo agregarlo al app.js
+Y crear router y controller y por ultimo agregarlo al app.js
