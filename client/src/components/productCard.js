@@ -11,6 +11,8 @@ import Typography from '@material-ui/core/Typography';
 const styles = {
   card: {
     maxWidth: 345,
+    width: 300,
+    margin: 20,
   },
   media: {
     objectFit: 'cover',
@@ -23,38 +25,40 @@ class ProductCard extends React.Component {
     this.state = { show: false };
   }
 
-  closeDialog = () => {
-    console.log("HOLA",this.state.show)
-    this.setState({show: false})
-    console.log("HOLA despues",this.state.show)
+  closeDialog(){
+    this.setState({ show: false });
   }
 
   openDialog = () => {
     this.setState({show: true})
   }
+
   render(){
-      return (
-    <Card className={this.props.card} onClick={this.openDialog}>
-      <CardActionArea>
-        <CardMedia
-          component="img"
-          alt="Pharma Prod"
-          className={this.props.media}
-          height="140"
-          src="https://5.imimg.com/data5/RE/SD/MY-3773531/pharmaceutical-product-500x500.jpg"
-          title="Producto Farmaceutico"
-        />
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="h2">
-            Product
-          </Typography>
-          <Typography component="p">
-            Lorem Ipsum algo algo
-          </Typography>
-        </CardContent>
-      </CardActionArea>
-      <ProductModal open={this.state.show} handleClose={this.closeDialog.bind(this)}/>
-    </Card>
+    const { classes } = this.props;
+    return (
+      <div>
+        <Card className={classes.card} onClick={this.openDialog }>
+          <CardActionArea>
+            <CardMedia
+              component="img"
+              alt="Pharma Prod"
+              className={this.props.media}
+              height="140"
+              src="https://5.imimg.com/data5/RE/SD/MY-3773531/pharmaceutical-product-500x500.jpg"
+              title="Producto Farmaceutico"
+            />
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="h2">
+                Product
+              </Typography>
+              <Typography component="p">
+                Lorem Ipsum algo algo
+              </Typography>
+            </CardContent>
+          </CardActionArea>
+        </Card>
+        <ProductModal open={this.state.show} handleClose={this.closeDialog.bind(this)}/>
+      </div>
 
   );
 

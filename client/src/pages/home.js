@@ -79,11 +79,12 @@ const styles = theme => ({
 		height: '40px',
 	},
 	container: {
-		margin: '1rem',
+		margin: 20,
 	},
 	products: {
 		display: 'flex',
 		flexFlow: 'row wrap',
+		marginTop: '70px',
 	},
 });
 
