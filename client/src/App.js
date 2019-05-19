@@ -15,7 +15,6 @@ const theme = createMuiTheme({
   typography: { useNextVariants: true },
 });
 
-
 export default class App extends Component {
 
 
