@@ -1,24 +1,24 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Products', {
-      PROD_ID: {
+    return queryInterface.createTable('ActivePrinciples', {
+      AP_ID: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      PROD_NAME: {
+      AP_NAME: {
         allowNull: false,
         type: Sequelize.STRING
       },
-      PROD_DESCRIPTION: {
+      AP_PROD_ID: {
         allowNull: false,
         type: Sequelize.STRING
       }
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Products');
+    return queryInterface.dropTable('ActivePrinciples');
   }
 };
