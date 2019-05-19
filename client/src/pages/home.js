@@ -3,6 +3,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import ProductCard from '../components/productCard';
 import MenuAppBar from '../components/menuAppBar';
+import SearchAppBar from '../components/searchAppBar';
 import config from '../config/config';
 
 var product = {
@@ -21,7 +22,7 @@ class Home extends React.Component{
 	constructor(props){
 		super(props);
 		this.state = {
-			products: [product, product],
+			products: [product, product, product],
 		}
 	}
 
@@ -64,6 +65,7 @@ class Home extends React.Component{
                     )
 				}
 				</div>
+				<SearchAppBar/>
 			</div>
 		)
 	}

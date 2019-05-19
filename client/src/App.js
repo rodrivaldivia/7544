@@ -32,8 +32,8 @@ export default class App extends Component {
           <div>
             <Switch>
             {/*<Route path="/" exact={true} component={withAuth(Home)} />*/}
-            <Route path="/" exact={true} component={Home} />
-            <Redirect to="/" />
+            <Route path="/products" exact={true} component={Home} />
+            <Redirect to="/products" />
             </Switch>
           </div>
           </Router>
