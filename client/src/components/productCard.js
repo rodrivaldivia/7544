@@ -36,27 +36,29 @@ class ProductCard extends React.Component {
   render(){
     const { classes } = this.props;
     return (
-    <Card className={classes.card} onClick={this.openDialog}>
-      <CardActionArea>
-        <CardMedia
-          component="img"
-          alt="Pharma Prod"
-          className={this.props.media}
-          height="140"
-          src="https://5.imimg.com/data5/RE/SD/MY-3773531/pharmaceutical-product-500x500.jpg"
-          title="Producto Farmaceutico"
-        />
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="h2">
-            Product
-          </Typography>
-          <Typography component="p">
-            Lorem Ipsum algo algo
-          </Typography>
-        </CardContent>
-      </CardActionArea>
-      <ProductModal open={this.state.show} product={this.props.product} handleClose={this.closeDialog.bind(this)}/>
-    </Card>
+      <div>
+        <Card className={classes.card} onClick={this.openDialog}>
+          <CardActionArea>
+            <CardMedia
+              component="img"
+              alt="Pharma Prod"
+              className={this.props.media}
+              height="140"
+              src="https://5.imimg.com/data5/RE/SD/MY-3773531/pharmaceutical-product-500x500.jpg"
+              title="Producto Farmaceutico"
+            />
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="h2">
+                Product
+              </Typography>
+              <Typography component="p">
+                Lorem Ipsum algo algo
+              </Typography>
+            </CardContent>
+          </CardActionArea>
+        </Card>
+        <ProductModal open={this.state.show} product={this.props.product} handleClose={this.closeDialog.bind(this)}/>
+      </div>
   );
 
   }
