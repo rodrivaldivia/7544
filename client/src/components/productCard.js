@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import ProductModal from './productModal'
 import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -16,15 +17,29 @@ const styles = {
   },
 };
 
-function ProductCard(props) {
-  const { classes } = props;
-  return (
-    <Card className={classes.card}>
+class ProductCard extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = { show: false };
+  }
+
+  closeDialog = () => {
+    console.log("HOLA",this.state.show)
+    this.setState({show: false})
+    console.log("HOLA despues",this.state.show)
+  }
+
+  openDialog = () => {
+    this.setState({show: true})
+  }
+  render(){
+      return (
+    <Card className={this.props.card} onClick={this.openDialog}>
       <CardActionArea>
         <CardMedia
           component="img"
           alt="Pharma Prod"
-          className={classes.media}
+          className={this.props.media}
           height="140"
           src="https://5.imimg.com/data5/RE/SD/MY-3773531/pharmaceutical-product-500x500.jpg"
           title="Producto Farmaceutico"
@@ -38,9 +53,15 @@ function ProductCard(props) {
           </Typography>
         </CardContent>
       </CardActionArea>
+      <ProductModal open={this.state.show} handleClose={this.closeDialog.bind(this)}/>
     </Card>
+
   );
+
+  }
+  
 }
+
 
 ProductCard.propTypes = {
   classes: PropTypes.object.isRequired,
