@@ -3,6 +3,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import ProductCard from '../components/productCard';
 import MenuAppBar from '../components/menuAppBar';
+import config from '../config/config';
 
 var product = {
 	name: 'Nombre',
@@ -12,6 +13,8 @@ var product = {
 	format: ['70ml'],
 	activePrinciples: ['Guido'],
 }
+
+const server_url = config.server_url;
 
 class Home extends React.Component{
 
@@ -23,7 +26,26 @@ class Home extends React.Component{
 	}
 
 	getProducts(){
-		// fetch
+		fetch(server_url + '/product', {
+			method: 'get',
+			headers: {
+				'Content-Type':'application/json',
+				// 'Authorization': authToken.getToken(),
+			}
+		})
+		.then(response => response.json())
+		.then(data => {
+			console.log(data);
+			for (let i in data.products){
+				console.log(data.products[i]);
+			}
+			this.setState({ 
+				//products : data.products,
+			});
+		})
+		.catch((err) => {
+			console.log(err)
+		});
 	}
 
 	componentDidMount(){
@@ -38,7 +60,7 @@ class Home extends React.Component{
 				<div className={classes.products}>
 				{
 					this.state.products.map((product) => 
-                    	<ProductCard product={product}/>
+                    	<ProductCard key={product.code} product={product}/>
                     )
 				}
 				</div>

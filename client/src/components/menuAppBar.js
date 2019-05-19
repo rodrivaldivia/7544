@@ -47,7 +47,7 @@ class MenuAppBar extends React.Component {
     const open = Boolean(anchorEl);
 
     return (
-      <AppBar color='default' elevation='0' square='true'>
+      <AppBar color='default' elevation={0} square={true}>
         <Toolbar>
           <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
             <MenuIcon/>
