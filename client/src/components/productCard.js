@@ -53,7 +53,7 @@ class ProductCard extends React.Component {
           </Typography>
         </CardContent>
       </CardActionArea>
-      <ProductModal open={this.state.show} handleClose={this.closeDialog.bind(this)}/>
+      <ProductModal open={this.state.show} product={this.props.product} handleClose={this.closeDialog.bind(this)}/>
     </Card>
 
   );

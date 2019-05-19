@@ -16,6 +16,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
 import ImageIcon from '@material-ui/icons/Image';
 import WorkIcon from '@material-ui/icons/Work';
+import BeachAccessIcon from '@material-ui/icons/BeachAccess';
 
 const styles = {
   card: {
@@ -70,6 +71,7 @@ const DialogActions = withStyles(theme => ({
 
 class ProductModal extends React.Component {
   render(){
+    const { classes } = this.props;
     return (
         <Dialog
           onClose={this.props.handleClose}
@@ -77,23 +79,41 @@ class ProductModal extends React.Component {
           open={this.props.open}
         >
           <DialogTitle id="customized-dialog-title" onClose={this.props.handleClose}>
-            Modal title
+            Producto: {this.props.product.name}
           </DialogTitle>
           <DialogContent>
-            <Typography gutterBottom>
-              Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac
-              facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum
-              at eros.
-            </Typography>
-            <Typography gutterBottom>
-              Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis
-              lacus vel augue laoreet rutrum faucibus dolor auctor.
-            </Typography>
-            <Typography gutterBottom>
-              Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel
-              scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus
-              auctor fringilla.
-            </Typography>
+            <Typography variant="h4" gutterBottom>
+             Principios activos: {this.props.product.activePrinciples}
+           </Typography>
+           <Typography variant="body1" >
+             {this.props.product.info}
+           </Typography>
+           <Typography variant="overline">
+             {this.props.product.format}
+           </Typography>
+           <Typography variant="button">
+             {this.props.product.code}
+           </Typography>
+           {/*<List className={classes.root}>
+             <ListItem>
+               <Avatar>
+                 <ImageIcon />
+               </Avatar>
+               <ListItemText primary="Photos" secondary="Jan 9, 2014" />
+             </ListItem>
+             <ListItem>
+               <Avatar>
+                 <WorkIcon />
+               </Avatar>
+               <ListItemText primary="Work" secondary="Jan 7, 2014" />
+             </ListItem>
+             <ListItem>
+               <Avatar>
+                 <BeachAccessIcon />
+               </Avatar>
+               <ListItemText primary="Vacation" secondary="July 20, 2014" />
+             </ListItem>
+           </List>*/}
           </DialogContent>
           <DialogActions>
             <Button onClick={this.props.handleClose} color="primary">
@@ -105,12 +125,6 @@ class ProductModal extends React.Component {
 
   }  
 }
-
-ProductModal.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
-
-
           // <Typography gutterBottom variant="h5" component="h2">
           //   Product
           // </Typography>
@@ -137,5 +151,12 @@ ProductModal.propTypes = {
           //     <ListItemText primary="Vacation" secondary="July 20, 2014" />
           //   </ListItem>
           // </List>
+
+
+ProductModal.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+
 
 export default withStyles(styles)(ProductModal);
