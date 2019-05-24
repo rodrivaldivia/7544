@@ -42,14 +42,14 @@ const DialogTitle = withStyles(theme => ({
 }))(props => {
   const { children, classes, onClose } = props;
   return (
-    <MuiDialogTitle disableTypography className={classes.root}>
-      <Typography variant="h6">{children}</Typography>
-      {onClose ? (
-        <IconButton aria-label="Close" className={classes.closeButton} onClick={onClose}>
-          <CloseIcon />
-        </IconButton>
-      ) : null}
-    </MuiDialogTitle>
+      <MuiDialogTitle disableTypography className={classes.root}>
+        <Typography variant="h6">{children}</Typography>
+        {onClose ? (
+          <IconButton aria-label="Close" className={classes.closeButton} onClick={onClose}>
+            <CloseIcon />
+          </IconButton>
+        ) : null}
+      </MuiDialogTitle>
   );
 });
 
@@ -115,11 +115,11 @@ class ProductModal extends React.Component {
              </ListItem>
            </List>*/}
           </DialogContent>
-          <DialogActions>
+          {/*<DialogActions>
             <Button onClick={this.props.handleClose} color="primary">
               Listo
             </Button>
-          </DialogActions>
+          </DialogActions>*/}
         </Dialog>
   );
 

@@ -6,6 +6,8 @@ import MenuAppBar from '../components/menuAppBar';
 import SearchAppBar from '../components/searchAppBar';
 import config from '../config/config';
 
+import Anime from 'react-anime';
+
 var product = {
 	name: 'Nombre',
 	code: '1a5-32f3-54ff5',
@@ -22,7 +24,7 @@ class Home extends React.Component{
 	constructor(props){
 		super(props);
 		this.state = {
-			products: [product, product, product],
+			products: [product, product, product,product, product, product,product, product, product,],
 		}
 	}
 
@@ -53,17 +55,27 @@ class Home extends React.Component{
 		this.getProducts();
 	}
 
+
 	render(){
+		let animeProps = {
+	      opacity: [0, 1],
+	      translateY: [-64, 0],
+	      delay: (el, i) => i * 100
+	    };
 		const { classes } = this.props;
 		return(
 			<div className={classes.container}>
 				<MenuAppBar/>
 				<div className={classes.products}>
-				{
-					this.state.products.map((product) => 
-                    	<ProductCard key={product.code} product={product}/>
-                    )
-				}
+					<Anime {...animeProps}>
+					{
+						this.state.products.map((product, i) =>
+							<div key={i}>
+	                    		<ProductCard product={product}/>
+	                    	</div>
+	                    )
+					}
+					</Anime>
 				</div>
 				<SearchAppBar/>
 			</div>

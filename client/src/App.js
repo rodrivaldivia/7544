@@ -7,11 +7,17 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
 import Home from './pages/home';
-import AltaProductos from './pages/altaProductos';
+import AddProduct from './pages/addProduct';
 
 const theme = createMuiTheme({
   palette: {
     type: 'dark',
+    primary: {
+      main: '#67c9d6',
+    },
+    secondary: {
+      main: '#67d68a',
+    },
   },
   typography: { useNextVariants: true },
 });
@@ -34,7 +40,7 @@ export default class App extends Component {
             <Switch>
             {/*<Route path="/" exact={true} component={withAuth(Home)} />*/}
             <Route path="/products" exact={true} component={Home} />
-            <Route path="/subir" exact={true} component={AltaProductos} />
+            <Route path="/subir" exact={true} component={AddProduct} />
             <Redirect to="/products" />
             </Switch>
           </div>

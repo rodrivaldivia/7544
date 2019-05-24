@@ -8,17 +8,6 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 
-const styles = {
-  card: {
-    maxWidth: 345,
-    width: 300,
-    margin: 20,
-  },
-  media: {
-    objectFit: 'cover',
-  },
-};
-
 class ProductCard extends React.Component {
   constructor(props){
     super(props);
@@ -60,14 +49,23 @@ class ProductCard extends React.Component {
         <ProductModal open={this.state.show} product={this.props.product} handleClose={this.closeDialog.bind(this)}/>
       </div>
   );
-
-  }
-  
+  }  
 }
 
-
-ProductCard.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
+const styles = theme => ({
+  card: {
+    maxWidth: 345,
+    margin: 20,
+    width: 300,
+    [theme.breakpoints.down('sm')]: {
+        width: '95%',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+    },
+  },
+  media: {
+    objectFit: 'cover',
+  },
+});
 
 export default withStyles(styles)(ProductCard);

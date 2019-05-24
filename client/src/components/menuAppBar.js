@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -49,9 +50,9 @@ class MenuAppBar extends React.Component {
     return (
       <AppBar color='default' elevation={0} square={true}>
         <Toolbar>
-          <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
+          {/*<IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
             <MenuIcon/>
-          </IconButton>
+          </IconButton>*/}
           <Typography variant="h6" color="inherit" align='left' className={classes.grow}>
             Productos Farmaceuticos
           </Typography>
@@ -79,8 +80,13 @@ class MenuAppBar extends React.Component {
                 open={open}
                 onClose={this.handleClose}
               >
-                <MenuItem onClick={this.handleClose}>Profile</MenuItem>
-                <MenuItem onClick={this.handleClose}>My account</MenuItem>
+                <Link to="/">
+                  <MenuItem>Inicio</MenuItem>
+                </Link>
+                <MenuItem onClick={this.handleClose}>Cerrar Sesión</MenuItem>
+                <Link to="/subir">
+                  <MenuItem>Subir</MenuItem>
+                </Link>
               </Menu>
             </div>
           )}
