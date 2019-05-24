@@ -7,6 +7,7 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
 import Home from './pages/home';
+import AltaProductos from './pages/altaProductos';
 
 const theme = createMuiTheme({
   palette: {
@@ -33,6 +34,7 @@ export default class App extends Component {
             <Switch>
             {/*<Route path="/" exact={true} component={withAuth(Home)} />*/}
             <Route path="/products" exact={true} component={Home} />
+            <Route path="/subir" exact={true} component={AltaProductos} />
             <Redirect to="/products" />
             </Switch>
           </div>
