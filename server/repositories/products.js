@@ -11,8 +11,7 @@ class ProductsRepo {
 		console.log("Name " + name);
 		console.log("Code " + code);
 		console.log("Info " + info);
-		//console.log("INSERT INTO Products (PROD_NAME, PROD_CODE, PROD_DESCRIPTION) VALUES ('"+name+"','"+code+"','"+info+"');");
-		console.log(Products.sequelize.query("INSERT INTO Products (PROD_NAME, PROD_CODE, PROD_DESCRIPTION) VALUES ('"+name+"','"+code+"','"+info+"')"))
+		return Products.sequelize.query("INSERT INTO Products (PROD_NAME, PROD_CODE, PROD_DESCRIPTION) VALUES ('"+name+"','"+code+"','"+info+"')");
 	};
 }
 
