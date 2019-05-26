@@ -3,11 +3,15 @@ var ActivePrinciples = require("../models").ActivePrinciples;
 
 class ActivePrinciplesRepo {
 
-	addNewPrinciple(productId, active){
-		for(var i = 0; i < active.length; i++){
-			ActivePrinciples.sequelize.query("INSERT INTO ActivePrinciples (AP_NAME, AP_PROD_ID) VALUES ('"+active[i]+"','"+productId+"')");	
-		}
-		return true;
+	addNewPrinciple(productId, activePrinciples){
+		let aPrincipleList = []
+		activePrinciples.forEach((aPrinciple) => {
+			aPrincipleList.push({
+				name:aPrinciple,
+				productId: productId
+			})
+		})
+		ActivePrinciples.bulkCreate(aPrinciples)
 	};
 }
 

@@ -2,19 +2,27 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('ActivePrinciples', {
-      AP_ID: {
+      id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      AP_NAME: {
+      name: {
         allowNull: false,
         type: Sequelize.STRING
       },
-      AP_PROD_ID: {
+      productId: {
         allowNull: false,
         type: Sequelize.STRING
+      },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE
       }
     });
   },

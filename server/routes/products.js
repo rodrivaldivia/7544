@@ -1,9 +1,9 @@
 var express = require('express');
 var router = express.Router();
-var productsRepo = require('../repositories/products');
-var imagesRepo = require('../repositories/images');
+var productsRepository = require('../repositories/products');
+var imagesRepository = require('../repositories/images');
 var activePrinciplesRepo = require('../repositories/activePrinciples');
-var formatsRepo = require('../repositories/formats');
+var formatsRepository = require('../repositories/formats');
 
 /* GET users listing. */
 // router.get('/', function(req, res, next) {
@@ -11,7 +11,8 @@ var formatsRepo = require('../repositories/formats');
 // });
 
 router.get('/', function(req, res, next) {
-	return productsRepo.getAllProducts().then((products) => {
+	console.log("HOLA")
+	return productsRepository.getAllProducts().then((products) => {
 		res.json({
 			products
 		})
@@ -22,18 +23,20 @@ router.post('/', function(req, res){
 	var name = req.body.name;
 	var code = req.body.code;
 	var info = req.body.info;
-	var images = req.body.img;
-	var format = req.body.format;
-	var activePrinciples = req.body.activePrinciples;
-	console.log(name, code, info, images, format, activePrinciples);
-	productsRepo.addNewProduct(name, code, info).then((values) => {
-		var productId = values[0];
-		imagesRepo.addNewImage(productId, images);
-		formatsRepo.addNewFormat(productId, format);
-		activePrinciplesRepo.addNewPrinciple(productId, activePrinciples);
-		res.json({"productID": productId});
+	var images = req.body.imgList;
+	// var format = req.body.format;
+	// var activePrinciples = req.body.activePrinciples;
+	productsRepository.addNewProduct(name, code, info).then((product) => {
+		var productId = product.id;
+		console.log(product.id, images[0]);
+
+		imagesRepository.addNewImage(productId, images);
+		// formatsRepository.addNewFormat(productId, format);
+		// activePrinciplesRepo.addNewPrinciple(productId, activePrinciples);
+		res.json(product);
 	});
 	//res.send(req.body);
 })
+
 
 module.exports = router;
