@@ -31,7 +31,7 @@ router.post('/', function(req, res){
 		imagesRepo.addNewImage(productId, images);
 		formatsRepo.addNewFormat(productId, format);
 		activePrinciplesRepo.addNewPrinciple(productId, activePrinciples);
-		res.send(values);
+		res.json({"productID": productId});
 	});
 	//res.send(req.body);
 })
