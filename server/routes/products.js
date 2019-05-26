@@ -16,7 +16,15 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/', function(req, res){
-	res.send('Yo tengo una grande pene');
+	var name = req.body.name;
+	var code = req.body.code;
+	var info = req.body.info;
+	var images = req.body.img;
+	var format = req.body.format;
+	var activePrinciples = req.body.activePrinciples;
+	console.log(name, code, info, images, format, activePrinciples);
+	productsRepo.addNewProduct(name, code, info);
+	res.send(req.body);
 })
 
 module.exports = router;

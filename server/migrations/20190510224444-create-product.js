@@ -12,6 +12,10 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
+      PROD_CODE: {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
       PROD_DESCRIPTION: {
         allowNull: false,
         type: Sequelize.STRING
