@@ -4,7 +4,10 @@ var ActivePrinciples = require("../models").ActivePrinciples;
 class ActivePrinciplesRepo {
 
 	addNewPrinciple(productId, active){
-		return ActivePrinciples.sequelize.query("INSERT INTO ActivePrinciples (AP_NAME, AP_PROD_ID) VALUES ('"+active+"','"+productId+"')");
+		for(var i = 0; i < active.length; i++){
+			ActivePrinciples.sequelize.query("INSERT INTO ActivePrinciples (AP_NAME, AP_PROD_ID) VALUES ('"+active[i]+"','"+productId+"')");	
+		}
+		return true;
 	};
 }
 
