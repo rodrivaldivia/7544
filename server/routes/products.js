@@ -30,7 +30,7 @@ router.post('/', function(req, res){
 	let name = req.body.name;
 	let code = req.body.code;
 	let info = req.body.info;
-	let images = req.body.imgList;
+	let images = req.body.img;
 	let formats = req.body.format;
 	productsRepository.addNewProduct(name, code, info).then((product) => {
 		var productId = product.id;

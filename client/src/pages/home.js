@@ -24,7 +24,7 @@ class Home extends React.Component{
 	constructor(props){
 		super(props);
 		this.state = {
-			products: [product, product, product,product, product, product,product, product, product,],
+			products: [],
 		}
 	}
 
@@ -38,12 +38,12 @@ class Home extends React.Component{
 		})
 		.then(response => response.json())
 		.then(data => {
-			console.log(data);
-			for (let i in data.products){
-				console.log(data.products[i]);
-			}
+			console.log(this.state.products);
+			console.log(data.products[0]);
+			// var newprod = {name: data.products[0].name}
+			// data.products.push(product)
 			this.setState({ 
-				//products : data.products,
+				products : data.products,
 			});
 		})
 		.catch((err) => {
@@ -67,7 +67,7 @@ class Home extends React.Component{
 			<div className={classes.container}>
 				<MenuAppBar/>
 				<div className={classes.products}>
-					<Anime {...animeProps}>
+					{/*<Anime {...animeProps}>*/}
 					{
 						this.state.products.map((product, i) =>
 							<div key={i}>
@@ -75,7 +75,7 @@ class Home extends React.Component{
 	                    	</div>
 	                    )
 					}
-					</Anime>
+					{/*</Anime>*/}
 				</div>
 				<SearchAppBar/>
 			</div>
