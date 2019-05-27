@@ -1,9 +1,30 @@
 const Sequelize = require('sequelize');
 var Products = require("../models").Product;
+var Images = require("../models").Images;
+var Formats = require("../models").Formats;
 
 class ProductsRepo {
+	getProduct(id){
+		return Products.findOne({
+			where:{
+				id: id
+			},
+			include:[{
+				model: Images
+			},{
+				model: Formats
+			}]
+		});
+
+	}
 	getAllProducts(){
-		return Products.findAll();
+		return Products.findAll({
+			include:[{
+				model: Images
+			},{
+				model: Formats
+			}]
+		});
 	};
 
 	changeProductData( productId, name, code, info){

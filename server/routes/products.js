@@ -10,8 +10,15 @@ const formatsRepository = require('../repositories/formats');
 //   res.send('respond with a resource');
 // });
 
+router.get('/:id',function(req, res){
+	return productsRepository.getProduct(req.params.id).then(product => {
+		res.json({
+			product
+		})
+	})
+})
+
 router.get('/', function(req, res, next) {
-	console.log("HOLA")
 	return productsRepository.getAllProducts().then((products) => {
 		res.json({
 			products
