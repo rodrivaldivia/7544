@@ -12,6 +12,7 @@ class ProductCard extends React.Component {
   constructor(props){
     super(props);
     this.state = { show: false };
+    console.log(props.product)
   }
 
   closeDialog(){
@@ -24,6 +25,7 @@ class ProductCard extends React.Component {
 
   render(){
     const { classes } = this.props;
+    const { product } = this.props;
     return (
       <div>
         <Card className={classes.card} onClick={this.openDialog}>
@@ -31,17 +33,17 @@ class ProductCard extends React.Component {
             <CardMedia
               component="img"
               alt="Pharma Prod"
-              className={this.props.media}
+              className={classes.media}
               height="140"
               src="https://5.imimg.com/data5/RE/SD/MY-3773531/pharmaceutical-product-500x500.jpg"
               title="Producto Farmaceutico"
             />
             <CardContent>
               <Typography gutterBottom variant="h5" component="h2">
-                Product
+                {product.name}
               </Typography>
               <Typography component="p">
-                Lorem Ipsum algo algo
+                {product.description}
               </Typography>
             </CardContent>
           </CardActionArea>

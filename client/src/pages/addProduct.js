@@ -74,20 +74,20 @@ class AddProduct extends React.Component{
 			activePrinciples: this.state.activePrinciples,
 		};
 		console.log(product);
-		// fetch(server_url + '/api/authenticate', {
-		//   method: 'post',
-		//   headers: {
-		//     'Content-Type': 'application/json'
-		//   },
-		//   body: JSON.stringify(user),
-		// })
-		// .then(res => res.json())
-		// .then(res => {
-		//   console.log(res);
-		// })
-		// .catch(err => {
-		//   console.error(err);
-		// });
+		fetch(server_url + '/product', {
+		  method: 'post',
+		  headers: {
+		    'Content-Type': 'application/json'
+		  },
+		  body: JSON.stringify(product),
+		})
+		.then(res => res.json())
+		.then(res => {
+		  console.log(res);
+		})
+		.catch(err => {
+		  console.error(err);
+		});
 	}
 
 	render(){
