@@ -1,9 +1,9 @@
-var express = require('express');
-var router = express.Router();
-var productsRepository = require('../repositories/products');
-var imagesRepository = require('../repositories/images');
-var activePrinciplesRepo = require('../repositories/activePrinciples');
-var formatsRepository = require('../repositories/formats');
+const express = require('express');
+const router = express.Router();
+const productsRepository = require('../repositories/products');
+const imagesRepository = require('../repositories/images');
+const activePrinciplesRepo = require('../repositories/activePrinciples');
+const formatsRepository = require('../repositories/formats');
 
 /* GET users listing. */
 // router.get('/', function(req, res, next) {
@@ -20,23 +20,67 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/', function(req, res){
-	var name = req.body.name;
-	var code = req.body.code;
-	var info = req.body.info;
-	var images = req.body.imgList;
-	// var format = req.body.format;
-	// var activePrinciples = req.body.activePrinciples;
+	let name = req.body.name;
+	let code = req.body.code;
+	let info = req.body.info;
+	let images = req.body.imgList;
+	let formats = req.body.format;
 	productsRepository.addNewProduct(name, code, info).then((product) => {
 		var productId = product.id;
 		console.log(product.id, images[0]);
 
 		imagesRepository.addNewImage(productId, images);
-		// formatsRepository.addNewFormat(productId, format);
-		// activePrinciplesRepo.addNewPrinciple(productId, activePrinciples);
+		formatsRepository.addNewFormat(productId, formats);
 		res.json(product);
 	});
-	//res.send(req.body);
 })
 
+router.put('/:id',function(req, res){
+	let productId = req.params.id;
+	let code = req.body.code;
+	let info = req.body.info;
+	let name = req.body.name;
+	productsRepository.changeProductData(productId, name, code, info).then((product) => {
+		res.json(product)
+	})
 
+})
+
+router.delete('/:id',function(req, res){
+
+})
+
+router.delete('/picture/:pictureId',function(req, res){
+	imagesRepository.deleteImage(req.params.pictureId)
+		.then(data => {
+			res.json(data)
+		})
+
+})
+
+router.delete('/format/:formatId',function(req, res){
+		formatsRepository.deleteFormat(req.params.formatId)
+		.then(data => {
+			res.json(data)
+		})
+	
+})
+
+router.post('/:productId/picture',function(req, res){
+	let productId = req.params.productId;
+	let images = req.body.imgList;
+	imagesRepository.addNewImage(productId, images).then((imgs) => {
+		res.json(imgs)
+	})
+
+})
+
+router.post('/:productId/format',function(req, res){
+	let productId = req.params.productId;
+	let formats = req.body.format;
+	formatsRepository.addNewFormat(productId, formats).then((formats) => {
+		res.json(formats)
+	})
+
+})
 module.exports = router;

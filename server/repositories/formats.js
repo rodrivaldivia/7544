@@ -17,6 +17,16 @@ class FormatsRepo {
 		})
 		return Formats.bulkCreate(formatList)
 	};
+
+	deleteFormat(formatId){
+		return Formats.findOne({
+			where: {
+				id: formatId
+			}
+		}).then(format => {
+			return format.destroy()
+		})
+	}
 }
 
 module.exports = new FormatsRepo();

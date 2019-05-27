@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 var Images = require("../models").Images;
 
-class ImagesRepo {
+class ImagesRepository {
 
 	addNewImage(productId, imgLinkList){
 		let imgList = []
@@ -13,6 +13,16 @@ class ImagesRepo {
 		})
 		return Images.bulkCreate(imgList)
 	};
+
+	deleteImage(imgId){
+		return Images.findOne({
+			where: {
+				id: imgId
+			}
+		}).then(img => {
+			return img.destroy()
+		})
+	}
 }
 
-module.exports = new ImagesRepo();
+module.exports = new ImagesRepository();
