@@ -54,7 +54,9 @@ router.put('/:id',function(req, res){
 })
 
 router.delete('/:id',function(req, res){
-
+	productsRepository.deleteProduct(req.params.id).then(product => {
+		res.json(product)
+	})
 })
 
 router.delete('/picture/:pictureId',function(req, res){

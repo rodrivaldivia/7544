@@ -50,6 +50,27 @@ class ProductsRepo {
 			description: info
 		})
 	};
+
+	deleteProduct(productId){
+		return Products.findOne({
+			where: {
+				id: productId
+			},
+			include: [{
+				model: Images
+			},{
+				model: Formats	
+			}]
+		}).then( product => {
+			product.Images.forEach(img => {
+				img.destroy()
+			})
+			product.Formats.forEach(img => {
+				img.destroy()
+			})
+			return product.destroy()
+		})
+	}
 }
 
 module.exports = new ProductsRepo();
