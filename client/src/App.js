@@ -8,6 +8,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 
 import Home from './pages/home';
 import AddProduct from './pages/addProduct';
+import EditProduct from './pages/editProduct';
 
 const theme = createMuiTheme({
   palette: {
@@ -41,6 +42,7 @@ export default class App extends Component {
             {/*<Route path="/" exact={true} component={withAuth(Home)} />*/}
             <Route path="/products" exact={true} component={Home} />
             <Route path="/subir" exact={true} component={AddProduct} />
+            <Route path="/editar/:id" exact={true} component={EditProduct} />
             <Redirect to="/products" />
             </Switch>
           </div>

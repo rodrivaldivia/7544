@@ -18,7 +18,7 @@ import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
 
 const server_url = config.server_url;
 
-class AddProduct extends React.Component{
+class EditProduct extends React.Component{
 
 	constructor(props){
 		super(props);
@@ -30,6 +30,41 @@ class AddProduct extends React.Component{
 			format: [''],
 			activePrinciples: [''],
 		}
+	}
+
+	componentDidMount(){
+		this.getProduct();
+	}
+
+	getProduct(){
+		fetch(server_url + '/product/' + this.props.match.params.id, {
+			method: 'get',
+			headers: {
+				'Content-Type':'application/json',
+				// 'Authorization': authToken.getToken(),
+			}
+		})
+		.then(response => response.json())
+		.then(data => {
+			console.log(data.product);
+			let p = data.product;
+			let img = p.Images.map(i => i.link);
+			let format = p.Formats.map(i => i.info);
+			// let activePrinciples = p.ActivePrinciples.map(i => i.link);
+			console.log(p.name);
+
+			this.setState({ 
+				name: p.name,
+				code: p.code,
+				info: p.description,
+				img: img,
+				format: format,
+				activePrinciples: [''],
+			});
+		})
+		.catch((err) => {
+			console.log(err)
+		});
 	}
 
 	
@@ -74,8 +109,8 @@ class AddProduct extends React.Component{
 			activePrinciples: this.state.activePrinciples,
 		};
 		console.log(product);
-		fetch(server_url + '/product', {
-		  method: 'post',
+		fetch(server_url + '/product/' + this.props.match.params.id, {
+		  method: 'put',
 		  headers: {
 		    'Content-Type': 'application/json'
 		  },
@@ -93,6 +128,7 @@ class AddProduct extends React.Component{
 
 	render(){
 		const { classes } = this.props;
+		console.log(this.state)
 		return(
 			<div>
 				<MenuAppBar/>
@@ -111,6 +147,7 @@ class AddProduct extends React.Component{
 			              name="name"
 			              autoComplete='off'
 			              onChange={this.handleInputChange}
+			              value={this.state.name}
 			              autoFocus />
 			            </FormControl>
 			            <FormControl margin="normal" required fullWidth>
@@ -119,6 +156,7 @@ class AddProduct extends React.Component{
 			              type="code"
 			              autoComplete='off'
 			              id="code"
+			              value={this.state.code}
 			              onChange={this.handleInputChange}
 			              />
 			            </FormControl>
@@ -234,6 +272,7 @@ class AddProduct extends React.Component{
 			              autoComplete='off'
 			              multiline={true} 
 			              id="info"
+			              value={this.state.info}
 			              onChange={this.handleInputChange}
 			              />
 			            </FormControl>
@@ -308,4 +347,4 @@ const styles = theme => ({
 	},
 });
 
-export default  withStyles(styles)(AddProduct);
+export default  withStyles(styles)(EditProduct);

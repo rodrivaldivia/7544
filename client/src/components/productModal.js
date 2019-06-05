@@ -17,6 +17,8 @@ import Avatar from '@material-ui/core/Avatar';
 import ImageIcon from '@material-ui/icons/Image';
 import WorkIcon from '@material-ui/icons/Work';
 import BeachAccessIcon from '@material-ui/icons/BeachAccess';
+import config from '../config/config';
+const server_url = config.server_url;
 
 const styles = {
   card: {
@@ -25,6 +27,9 @@ const styles = {
   media: {
     objectFit: 'cover',
   },
+  buttonDelete:{
+    color: 'tomato'
+  }
 };
 
 const DialogTitle = withStyles(theme => ({
@@ -70,6 +75,22 @@ const DialogActions = withStyles(theme => ({
 
 
 class ProductModal extends React.Component {
+  deleteProduct(){
+    fetch(server_url + '/product/' + this.props.product.id, {
+      method: 'delete',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    })
+    .then(res => res.json())
+    .then(res => {
+      console.log(res);
+      this.props.handleClose();
+    })
+    .catch(err => {
+      console.error(err);
+    });
+  } 
   render(){
     const { classes } = this.props;
     return (
@@ -115,11 +136,14 @@ class ProductModal extends React.Component {
              </ListItem>
            </List>*/}
           </DialogContent>
-          {/*<DialogActions>
-            <Button onClick={this.props.handleClose} color="primary">
-              Listo
+          <DialogActions>
+            <Button href={'/editar/' + this.props.product.id } color="secondary">
+              Editar
             </Button>
-          </DialogActions>*/}
+            <Button onClick={this.deleteProduct.bind(this)} className={classes.buttonDelete}>
+              Borrar
+            </Button>
+          </DialogActions>
         </Dialog>
   );
 
