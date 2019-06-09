@@ -95,7 +95,6 @@ class AddProduct extends React.Component{
 		const { classes } = this.props;
 		return(
 			<div>
-				<MenuAppBar/>
 				<main className={classes.main}>
 				<Paper className={classes.paper}>
 					<Avatar className={classes.avatar}>

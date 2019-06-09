@@ -91,6 +91,24 @@ class ProductModal extends React.Component {
       console.error(err);
     });
   } 
+  renderEdit(classes){
+    if(this.props.editable)
+      return(
+        <div>
+          <Button href={'/editar/' + this.props.product.id } color="secondary">
+            Editar
+          </Button>
+          <Button onClick={this.deleteProduct.bind(this)} className={classes.buttonDelete}>
+              Borrar
+          </Button>
+        </div>
+      )
+    return(
+      <Button onClick={this.props.handleClose} color="primary">
+              Ok
+      </Button>
+    )
+  }
   render(){
     const { classes } = this.props;
     return (
@@ -137,12 +155,8 @@ class ProductModal extends React.Component {
            </List>*/}
           </DialogContent>
           <DialogActions>
-            <Button href={'/editar/' + this.props.product.id } color="secondary">
-              Editar
-            </Button>
-            <Button onClick={this.deleteProduct.bind(this)} className={classes.buttonDelete}>
-              Borrar
-            </Button>
+          {this.renderEdit(classes)}
+
           </DialogActions>
         </Dialog>
   );

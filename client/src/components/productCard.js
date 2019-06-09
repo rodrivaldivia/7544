@@ -7,6 +7,8 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
+import Create from '@material-ui/icons/Create';
+import IconButton from '@material-ui/core/IconButton';
 
 
 class ProductCard extends React.Component {
@@ -15,7 +17,6 @@ class ProductCard extends React.Component {
     this.state = { show: false };
     console.log(props.product)
   }
-
   closeDialog(){
     this.setState({ show: false });
   }
@@ -24,12 +25,12 @@ class ProductCard extends React.Component {
     this.setState({show: true})
   }
 
+
   render(){
-    const { classes } = this.props;
-    const { product } = this.props;
+    const { classes, product, editable } = this.props;
     return (
       <div>
-        <Card className={classes.card} onClick={this.openDialog}>
+        <Card className={classes.card} style={{position: 'relative'}} onClick={this.openDialog}>
           <CardActionArea>
             <CardMedia
               component="img"
@@ -49,7 +50,7 @@ class ProductCard extends React.Component {
             </CardContent>
           </CardActionArea>
         </Card>
-        <ProductModal open={this.state.show} product={this.props.product} handleClose={this.closeDialog.bind(this)}/>
+        <ProductModal open={this.state.show} editable={editable} product={product} handleClose={this.closeDialog.bind(this)}/>
       </div>
   );
   }  
@@ -65,6 +66,11 @@ const styles = theme => ({
         marginLeft: 'auto',
         marginRight: 'auto',
     },
+  },
+  editButton : {
+    position: 'absolute',
+    top: 0,
+    right: 0
   },
   media: {
     objectFit: 'cover',

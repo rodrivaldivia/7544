@@ -65,13 +65,12 @@ class Home extends React.Component{
 		const { classes } = this.props;
 		return(
 			<div className={classes.container}>
-				<MenuAppBar/>
 				<div className={classes.products}>
 					{/*<Anime {...animeProps}>*/}
 					{
 						this.state.products.map((product, i) =>
 							<div key={i}>
-	                    		<ProductCard product={product}/>
+	                    		<ProductCard editable={false} product={product}/>
 	                    	</div>
 	                    )
 					}

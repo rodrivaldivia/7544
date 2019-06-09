@@ -131,7 +131,6 @@ class EditProduct extends React.Component{
 		console.log(this.state)
 		return(
 			<div>
-				<MenuAppBar/>
 				<main className={classes.main}>
 				<Paper className={classes.paper}>
 					<Avatar className={classes.avatar}>
