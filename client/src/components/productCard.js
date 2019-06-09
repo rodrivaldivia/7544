@@ -16,6 +16,10 @@ class ProductCard extends React.Component {
     super(props);
     this.state = { show: false };
     console.log(props.product)
+    if(props.product.Images.length)
+      this.state.mainImage = props.product.Images[0].link
+    else
+      this.state.mainImage = "https://5.imimg.com/data5/RE/SD/MY-3773531/pharmaceutical-product-500x500.jpg"
   }
   closeDialog(){
     this.setState({ show: false });
@@ -28,6 +32,7 @@ class ProductCard extends React.Component {
 
   render(){
     const { classes, product, editable } = this.props;
+    console.log(product.Images)
     return (
       <div>
         <Card className={classes.card} style={{position: 'relative'}} onClick={this.openDialog}>
@@ -37,7 +42,7 @@ class ProductCard extends React.Component {
               alt="Pharma Prod"
               className={classes.media}
               height="140"
-              src="https://5.imimg.com/data5/RE/SD/MY-3773531/pharmaceutical-product-500x500.jpg"
+              src={this.state.mainImage}
               title="Producto Farmaceutico"
             />
             <CardContent>
