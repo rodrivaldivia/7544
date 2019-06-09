@@ -9,6 +9,7 @@ import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withStyles } from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
+import TextField from '@material-ui/core/TextField';
 
 const styles = theme => ({
   root: {
@@ -75,7 +76,7 @@ const styles = theme => ({
 });
 
 function SearchAppBar(props) {
-  const { classes } = props;
+  const { classes, onTextChange, search, stateKey } = props;
   return (
     <div className={classes.root}>
       <AppBar color='default' elevation={0} className={classes.appBar} position="fixed">
@@ -83,13 +84,16 @@ function SearchAppBar(props) {
             <div className={classes.searchIcon}>
               <SearchIcon />
             </div>
-            <InputBase
-              placeholder="Buscar…"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-            />
+                  <InputBase
+                placeholder="Buscar..."
+                classes={{
+                      root: classes.inputRoot,
+                      input: classes.inputInput,
+                }}
+                name={search}
+                onChange={onTextChange(stateKey)}
+              />
+
           </div>
       </AppBar>
     </div>

@@ -25,6 +25,7 @@ class Home extends React.Component{
 		super(props);
 		this.state = {
 			products: [],
+			search: ''
 		}
 	}
 
@@ -55,6 +56,10 @@ class Home extends React.Component{
 		this.getProducts();
 	}
 
+	handleTextChange= name => event => {
+	    this.setState({ [name] : event.target.value });
+	};
+
 
 	render(){
 		let animeProps = {
@@ -68,15 +73,19 @@ class Home extends React.Component{
 				<div className={classes.products}>
 					{/*<Anime {...animeProps}>*/}
 					{
-						this.state.products.map((product, i) =>
-							<div key={i}>
-	                    		<ProductCard editable={false} product={product}/>
-	                    	</div>
-	                    )
+						this.state.products.map((product, i) =>{
+							if(product.name.toLowerCase().includes(this.state.search.toLowerCase()))
+								return(
+									<div key={i}>
+			                    		<ProductCard editable={false} product={product}/>
+			                    	</div>
+								)
+
+						})
 					}
 					{/*</Anime>*/}
 				</div>
-				<SearchAppBar/>
+				<SearchAppBar stateKey="search" search={this.state.search} onTextChange={this.handleTextChange.bind(this)}/>
 			</div>
 		)
 	}

@@ -4,6 +4,7 @@ import Typography from '@material-ui/core/Typography';
 import Card from '@material-ui/core/Card';
 import IconButton from '@material-ui/core/IconButton';
 import AddBox from '@material-ui/icons/AddBox';
+import SearchAppBar from '../components/searchAppBar';
 import ProductCard from '../components/productCard';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
@@ -17,6 +18,7 @@ class Backoffice extends Component{
 		super(props);
 		this.state = {
 			products: [],
+			search: ''
 		}
 	}
 	getProducts(){
@@ -46,6 +48,11 @@ class Backoffice extends Component{
 		this.getProducts();
 	}
 
+	handleTextChange= name => event => {
+	    this.setState({ [name] : event.target.value });
+	};
+
+
 
 	render(){
 		return(
@@ -62,15 +69,20 @@ class Backoffice extends Component{
 						</div>
 						<div style={styles.cardBody}>	
 						{
-							this.state.products.map((product, i) =>
-								<div key={i}>
-		                    		<ProductCard editable={true} product={product}/>
-		                    	</div>
-		                    )
+							this.state.products.map((product, i) =>{
+								if(product.name.toLowerCase().includes(this.state.search.toLowerCase()))
+								return(
+									<div key={i}>
+			                    		<ProductCard editable={false} product={product}/>
+			                    	</div>
+								)
+
+							})
 						}
 						</div>
 					</CardContent>
 				</Card>
+				<SearchAppBar stateKey="search" search={this.state.search} onTextChange={this.handleTextChange.bind(this)}/>
 			</div>
 		)
 	}
