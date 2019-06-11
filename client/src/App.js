@@ -10,6 +10,7 @@ import Home from './pages/home';
 import Backoffice from './pages/backoffice';
 import AddProduct from './pages/addProduct';
 import EditProduct from './pages/editProduct';
+import AddPrinciple from './pages/addPrinciple';
 
 const theme = createMuiTheme({
   palette: {
@@ -41,8 +42,9 @@ export default class App extends Component {
 
           <MenuAppBar/>
             {/*<Route path="/" exact={true} component={withAuth(Home)} />*/}
-            <Route path="/products" exact component={Home} />
-            <Route path="/subir"  component={AddProduct} />
+            <Route path="/" exact component={Home} />
+            <Route path="/subir/producto"  component={AddProduct} />
+            <Route path="/subir/principio"  component={AddPrinciple} />
             <Route path="/backoffice"  component={Backoffice} />
             <Route path="/editar/:id"  component={EditProduct} />
           </Router>

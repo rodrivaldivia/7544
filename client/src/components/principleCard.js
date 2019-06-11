@@ -9,16 +9,14 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 import Create from '@material-ui/icons/Create';
 import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
+import config from '../config/config';
+const server_url = config.server_url;
 
-
-class ProductCard extends React.Component {
+class PrincipleCard extends React.Component {
   constructor(props){
     super(props);
     this.state = { show: false };
-    if(props.product.Images.length)
-      this.state.mainImage = props.product.Images[0].link
-    else
-      this.state.mainImage = "https://5.imimg.com/data5/RE/SD/MY-3773531/pharmaceutical-product-500x500.jpg"
   }
   closeDialog(){
     this.setState({ show: false });
@@ -28,30 +26,46 @@ class ProductCard extends React.Component {
     this.setState({show: true})
   }
 
+  deleteProduct(){
+    console.log(this.props)
+    fetch(server_url + '/principles/' + this.props.principle.id, {
+      method: 'delete',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    })
+    .then(res => res.json())
+    .then(res => {
+      console.log(res);
+      this.props.onDelete(this.props.principle);
+    })
+    .catch(err => {
+      console.error(err);
+    });
+  }
+
 
   render(){
-    const { classes, product, editable } = this.props;
+    const { classes, principle, editable } = this.props;
     return (
       <div>
         <Card className={classes.card} style={{position: 'relative'}} onClick={this.openDialog}>
           <CardActionArea>
-            <CardMedia
-              component="img"
-              alt="Pharma Prod"
-              className={classes.media}
-              height="140"
-              src={this.state.mainImage}
-              title="Producto Farmaceutico"
-            />
             <CardContent>
               <Typography gutterBottom variant="h5" component="h2">
-                {product.name}
+                {principle.name}
               </Typography>
               <Typography component="p">
-                {product.description}
+                {principle.information}
               </Typography>
             </CardContent>
           </CardActionArea>
+          <Button  color="primary">
+            Editar
+          </Button>
+          <Button onClick={this.deleteProduct.bind(this)} color="inherit">
+              Borrar
+          </Button>
         </Card>
       </div>
   );
@@ -79,4 +93,4 @@ const styles = theme => ({
   },
 });
 
-export default withStyles(styles)(ProductCard);
+export default withStyles(styles)(PrincipleCard);

@@ -4,8 +4,10 @@ import Typography from '@material-ui/core/Typography';
 import Card from '@material-ui/core/Card';
 import IconButton from '@material-ui/core/IconButton';
 import AddBox from '@material-ui/icons/AddBox';
+import TabNav from '../components/tabNav';
 import SearchAppBar from '../components/searchAppBar';
 import ProductCard from '../components/productCard';
+import PrincipleCard from '../components/principleCard';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
@@ -17,9 +19,17 @@ class Backoffice extends Component{
 	constructor(props){
 		super(props);
 		this.state = {
+			tabs:[{
+				label: 'Productos',
+				renderer: this.renderProductsBackoffice.bind(this)
+			},{
+				label: 'Principios Activos',
+				renderer: this.renderActivePrinciplesBackoffice.bind(this)
+			}],
 			products: [],
 			search: ''
 		}
+
 	}
 	getProducts(){
 		fetch(server_url + '/product', {
@@ -31,8 +41,6 @@ class Backoffice extends Component{
 		})
 		.then(response => response.json())
 		.then(data => {
-			console.log(this.state.products);
-			console.log(data.products[0]);
 			// var newprod = {name: data.products[0].name}
 			// data.products.push(product)
 			this.setState({ 
@@ -44,26 +52,55 @@ class Backoffice extends Component{
 		});
 	}
 
+	getActivePrinciples(){
+		fetch(server_url + '/principles', {
+			method: 'get',
+			headers: {
+				'Content-Type':'application/json',
+				// 'Authorization': authToken.getToken(),
+			}
+		})
+		.then(response => {
+			return response.json()
+		})
+		.then(data => {
+			// var newprod = {name: data.products[0].name}
+			// data.products.push(product)
+			this.setState({ 
+				activePrinciples : data.principles,
+			});
+		})
+		.catch((err) => {
+			console.log(err)
+		});
+	}
+
 	componentDidMount(){
 		this.getProducts();
+		this.getActivePrinciples();
 	}
 
 	handleTextChange= name => event => {
 	    this.setState({ [name] : event.target.value });
 	};
 
+	onPrincipleDelete(deletedPrinciple){
+		let newPrinciples = []
+		this.state.activePrinciples.forEach(principle => {
+			if(deletedPrinciple.id !=principle.id)
+				newPrinciples.push(principle)
+		})
+		this.setState({activePrinciples: newPrinciples})
+	}
 
-
-	render(){
+	renderProductsBackoffice(){
 		return(
-			<div style={styles.mainCointainer}>
-				<Card>
-					<CardContent>
-						<div style={styles.cardHeader}>
+			<div>
+			<div style={styles.cardHeader}>
 							<Typography variant="h3">
-								Bienvenido al backoffice
+								Productos
 							</Typography>
-							<IconButton href="/subir">
+							<IconButton href="/subir/producto">
 								<AddBox color="primary"/>
 							</IconButton>
 						</div>
@@ -73,15 +110,51 @@ class Backoffice extends Component{
 								if(product.name.toLowerCase().includes(this.state.search.toLowerCase()))
 								return(
 									<div key={i}>
-			                    		<ProductCard editable={false} product={product}/>
+			                    		<ProductCard editable={false} product={product} />
 			                    	</div>
 								)
 
 							})
 						}
+			</div>
+			</div>
+		)
+	}
+
+	renderActivePrinciplesBackoffice(){
+		return(
+			<div>
+			<div style={styles.cardHeader}>
+							<Typography variant="h3">
+								Principios Activos
+							</Typography>
+							<IconButton href="/subir/principio">
+								<AddBox color="primary"/>
+							</IconButton>
 						</div>
-					</CardContent>
-				</Card>
+						<div style={styles.cardBody}>	
+						{
+							this.state.activePrinciples.map((principle, i) =>{
+								if(principle.name.toLowerCase().includes(this.state.search.toLowerCase()))
+								return(
+									<div>
+			                    		<PrincipleCard principle={principle} onDelete={this.onPrincipleDelete.bind(this)}/>
+			                    	</div>
+								)
+
+							})
+						}
+			</div>
+			</div>
+		)
+	}
+
+
+	render(){
+		return(
+			<div style={styles.mainCointainer}>
+				<TabNav tabs={this.state.tabs}/>
+
 				<SearchAppBar stateKey="search" search={this.state.search} onTextChange={this.handleTextChange.bind(this)}/>
 			</div>
 		)

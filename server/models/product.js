@@ -9,6 +9,12 @@ module.exports = (sequelize, DataTypes) => {
     // associations can be defined here
     Product.hasMany(models.Images)
     Product.hasMany(models.Formats)
+    Product.belongsToMany(models.ActivePrinciples,{
+      through: {
+        model: models.ProductActivePrinciple,
+      },
+      foreignKey: 'productId'
+    })
   };
   return Product;
 };
