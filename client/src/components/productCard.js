@@ -15,10 +15,7 @@ class ProductCard extends React.Component {
   constructor(props){
     super(props);
     this.state = { show: false };
-    if(props.product.Images.length)
-      this.state.mainImage = props.product.Images[0].link
-    else
-      this.state.mainImage = "https://5.imimg.com/data5/RE/SD/MY-3773531/pharmaceutical-product-500x500.jpg"
+    this.state.mainImage = (props.product.images.length)? props.product.images[0] : "https://5.imimg.com/data5/RE/SD/MY-3773531/pharmaceutical-product-500x500.jpg"
   }
   closeDialog(){
     this.setState({ show: false });
@@ -53,6 +50,7 @@ class ProductCard extends React.Component {
             </CardContent>
           </CardActionArea>
         </Card>
+        <ProductModal open={this.state.show} editable={editable} onDelete={this.props.onDelete} product={product} handleClose={this.closeDialog.bind(this)}/>
       </div>
   );
   }  

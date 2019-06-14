@@ -7,7 +7,6 @@ import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import MuiDialogContent from '@material-ui/core/DialogContent';
 import MuiDialogActions from '@material-ui/core/DialogActions';
 import IconButton from '@material-ui/core/IconButton';
-import AddProductModal from './addProductModal';
 import CloseIcon from '@material-ui/icons/Close';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft';
@@ -43,16 +42,6 @@ const styles = {
   },
   arrowIcon:{
     height: '100%'
-  },
-  productTitle:{
-    marginRight:'15px',
-    marginLeft: '3px'
-  },
-  productDialog:{
-    width: '80%'
-  },
-  productContent:{
-    margin: '5px 15px'
   }
 };
 
@@ -98,14 +87,14 @@ const DialogActions = withStyles(theme => ({
 }))(MuiDialogActions);
 
 
-class ProductModal extends React.Component {
+class PrincipleModal extends React.Component {
   constructor(props){
     super(props);
     const { product } = props
+    console.log(product)
     this.state = {
       selectedImage: (product.images.length)? product.images[0] : "https://5.imimg.com/data5/RE/SD/MY-3773531/pharmaceutical-product-500x500.jpg",
-      selectedIndex: 0,
-      editProductShow: false,
+      selectedIndex: 0
     }
 
   }
@@ -127,12 +116,6 @@ class ProductModal extends React.Component {
     });
   } 
 
-  closeEditDialog(){
-    this.setState({editProductShow: false})
-  }
-  handleProductEdit(){
-    console.log('hola')
-  }
   handleNextPicture(){
 
     if(this.state.selectedIndex < this.props.product.images.length-1){
@@ -162,7 +145,7 @@ class ProductModal extends React.Component {
     if(this.props.editable)
       return(
         <div>
-          <Button onClick={() => this.setState({editProductShow: true})} color="secondary">
+          <Button href={'/editar/' + this.props.product.id } color="secondary">
             Editar
           </Button>
           <Button onClick={this.deleteProduct.bind(this)} className={classes.buttonDelete}>
@@ -184,10 +167,10 @@ class ProductModal extends React.Component {
           aria-labelledby="customized-dialog-title"
           open={this.props.open}
         >
-          <DialogTitle id="customized-dialog-title" style={styles.productTitle} onClose={this.props.handleClose}>
-            {this.props.product.name}
+          <DialogTitle id="customized-dialog-title" onClose={this.props.handleClose}>
+            Producto: {this.props.product.name}
           </DialogTitle>
-          <DialogContent style={styles.productContent}>
+          <DialogContent>
             <div style={styles.imageContainer}>
               <IconButton onClick={this.handleBackPicture.bind(this)}>
                 <KeyboardArrowLeftIcon style={styles.arrowIcon}/>
@@ -215,7 +198,6 @@ class ProductModal extends React.Component {
           {this.renderEdit(classes)}
 
           </DialogActions>
-          <AddProductModal open={this.state.editProductShow} product={this.props.product} onAdd={this.handleProductEdit.bind(this)} handleClose={this.closeEditDialog.bind(this)}/>
         </Dialog>
   );
 
@@ -223,10 +205,10 @@ class ProductModal extends React.Component {
 }
         
 
-ProductModal.propTypes = {
+PrincipleModal.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
 
 
-export default withStyles(styles)(ProductModal);
+export default withStyles(styles)(PrincipleModal);

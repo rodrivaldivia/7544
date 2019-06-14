@@ -12,6 +12,7 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
+import AddProductModal from '../components/addProductModal';
 import config from '../config/config';
 
 const server_url = config.server_url;
@@ -27,7 +28,9 @@ class Backoffice extends Component{
 				renderer: this.renderActivePrinciplesBackoffice.bind(this)
 			}],
 			products: [],
-			search: ''
+			search: '',
+			addProductShow:false,
+			addPrincipleShow:false,
 		}
 
 	}
@@ -52,6 +55,7 @@ class Backoffice extends Component{
 		});
 	}
 
+
 	getActivePrinciples(){
 		fetch(server_url + '/principles', {
 			method: 'get',
@@ -75,11 +79,21 @@ class Backoffice extends Component{
 		});
 	}
 
+	handleProductAdd(product){
+		console.log("HOLAA", product)
+		let newList = this.state.products
+		newList.unshift(product)
+		console.log(newList)
+		this.setState({ products : newList})
+	}
 	componentDidMount(){
 		this.getProducts();
 		this.getActivePrinciples();
 	}
 
+	closeProductDialog(){
+    	this.setState({ addProductShow: false });
+	}
 	handleTextChange= name => event => {
 	    this.setState({ [name] : event.target.value });
 	};
@@ -93,6 +107,17 @@ class Backoffice extends Component{
 		this.setState({activePrinciples: newPrinciples})
 	}
 
+
+	onProductDelete(deletedProduct){
+		let newProducts = []
+		this.state.products.forEach(product => {
+			if(deletedProduct.id !=product.id)
+				newProducts.push(product)
+		})
+		this.setState({products: newProducts})
+	}
+
+
 	renderProductsBackoffice(){
 		return(
 			<div>
@@ -100,7 +125,7 @@ class Backoffice extends Component{
 							<Typography variant="h3">
 								Productos
 							</Typography>
-							<IconButton href="/subir/producto">
+							<IconButton onClick={() => this.setState({addProductShow: true})}>
 								<AddBox color="primary"/>
 							</IconButton>
 						</div>
@@ -110,13 +135,14 @@ class Backoffice extends Component{
 								if(product.name.toLowerCase().includes(this.state.search.toLowerCase()))
 								return(
 									<div key={i}>
-			                    		<ProductCard editable={false} product={product} />
+			                    		<ProductCard editable={true} onDelete={this.onProductDelete.bind(this)} product={product} />
 			                    	</div>
 								)
 
 							})
 						}
 			</div>
+			<AddProductModal open={this.state.addProductShow} onAdd={this.handleProductAdd.bind(this)} handleClose={this.closeProductDialog.bind(this)}/>
 			</div>
 		)
 	}

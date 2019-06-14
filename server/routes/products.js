@@ -20,6 +20,19 @@ router.get('/:id',function(req, res){
 
 router.get('/', function(req, res, next) {
 	return productsRepository.getAllProducts().then((products) => {
+		products.forEach(product => {
+			const { Images, Formats } = product
+			let imageLinks = []
+			let formatsInfo = []
+			Images.forEach(image => {
+				imageLinks.push(image.link)
+			})
+			Formats.forEach(format => {
+				formatsInfo.push(format.info)
+			})
+			product.dataValues.images = imageLinks
+			product.dataValues.formats = formatsInfo
+		})
 		res.json({
 			products
 		})
@@ -35,10 +48,22 @@ router.post('/', function(req, res){
 	productsRepository.addNewProduct(name, code, info).then((product) => {
 		var productId = product.id;
 		console.log(product.id, images[0]);
-
-		imagesRepository.addNewImage(productId, images);
-		formatsRepository.addNewFormat(productId, formats);
-		res.json(product);
+		if(images)
+			imagesRepository.addNewImage(productId, images).then(images => {
+				formatsRepository.addNewFormat(productId, formats).then(formats=> {
+					let imageLinks = []
+					let formatsInfo = []
+					images.forEach(image => {
+						imageLinks.push(image.link)
+					})
+					formats.forEach(format => {
+						formatsInfo.push(format.info)
+					})
+					product.dataValues.images = imageLinks
+					product.dataValues.formats = formatsInfo
+					res.json(product)
+				})
+			})
 	});
 })
 

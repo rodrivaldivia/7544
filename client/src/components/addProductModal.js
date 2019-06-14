@@ -1,72 +1,119 @@
-import React from 'react'
+import React from 'react';
+import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import Card from '@material-ui/core/Card';
+import Dialog from '@material-ui/core/Dialog';
+import MuiDialogTitle from '@material-ui/core/DialogTitle';
+import MuiDialogContent from '@material-ui/core/DialogContent';
+import MuiDialogActions from '@material-ui/core/DialogActions';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
+import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import Avatar from '@material-ui/core/Avatar';
+import ImageIcon from '@material-ui/icons/Image';
+import WorkIcon from '@material-ui/icons/Work';
+import BeachAccessIcon from '@material-ui/icons/BeachAccess';
 import MenuAppBar from '../components/menuAppBar';
 import Paper from '@material-ui/core/Paper';
-import Button from '@material-ui/core/Button';
-import Avatar from '@material-ui/core/Avatar';
 import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Input from '@material-ui/core/Input';
 import InputBase from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import CloudUploadOutlineIcon from '@material-ui/icons/CloudUpload';
-import config from '../config/config';
 import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
 import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
-
+import config from '../config/config';
 const server_url = config.server_url;
 
-class EditProduct extends React.Component{
+const styles = {
+  card: {
+    maxWidth: 345,
+  },
+  media: {
+    objectFit: 'cover',
+  },
+  buttonDelete:{
+    color: 'tomato'
+  }
+};
 
-	constructor(props){
+const DialogTitle = withStyles(theme => ({
+  root: {
+    borderBottom: `1px solid ${theme.palette.divider}`,
+    margin: 0,
+    padding: theme.spacing.unit * 2,
+  },
+  closeButton: {
+    position: 'absolute',
+    right: theme.spacing.unit,
+    top: theme.spacing.unit,
+    color: theme.palette.grey[500],
+  },
+}))(props => {
+  const { children, classes, onClose } = props;
+  return (
+      <MuiDialogTitle disableTypography className={classes.root}>
+        <Typography variant="h6">{children}</Typography>
+        {onClose ? (
+          <IconButton aria-label="Close" className={classes.closeButton} onClick={onClose}>
+            <CloseIcon />
+          </IconButton>
+        ) : null}
+      </MuiDialogTitle>
+  );
+});
+
+const DialogContent = withStyles(theme => ({
+  root: {
+    margin: 0,
+    padding: theme.spacing.unit * 2,
+  },
+}))(MuiDialogContent);
+
+const DialogActions = withStyles(theme => ({
+  root: {
+    borderTop: `1px solid ${theme.palette.divider}`,
+    margin: 0,
+    padding: theme.spacing.unit,
+  },
+}))(MuiDialogActions);
+
+
+class AddProductModal extends React.Component {
+
+  	constructor(props){
 		super(props);
 		this.state = {
 			name: '',
 			code: '',
 			info: '',
-			img: [''],
-			format: [''],
-			activePrinciples: [''],
+			img: [],
+			format: [],
+			activePrinciples: [],
 		}
 	}
 
+
 	componentDidMount(){
-		this.getProduct();
+		if(this.props.product){
+			const { product } = this.props
+			let imageLinks = []
+			this.setState({
+				name: product.name,
+				code: product.code,
+				info: product.info,
+				img: product.images,
+				format: product.formats,
+				activePrinciples: ['Ninguno']
+			})
+			console.log(product)
+		}
 	}
-
-	getProduct(){
-		fetch(server_url + '/product/' + this.props.match.params.id, {
-			method: 'get',
-			headers: {
-				'Content-Type':'application/json',
-				// 'Authorization': authToken.getToken(),
-			}
-		})
-		.then(response => response.json())
-		.then(data => {
-			console.log(data.product);
-			let p = data.product;
-			let img = p.images
-			let format = p.Formats.map(i => i.info);
-			// let activePrinciples = p.ActivePrinciples.map(i => i.link);
-			console.log(p.name);
-
-			this.setState({ 
-				name: p.name,
-				code: p.code,
-				info: p.description,
-				img: img,
-				format: format,
-				activePrinciples: [''],
-			});
-		})
-		.catch((err) => {
-			console.log(err)
-		});
-	}
-
 	
 	handleInputChange = (event) => {
 		const { value, name } = event.target;
@@ -109,8 +156,8 @@ class EditProduct extends React.Component{
 			activePrinciples: this.state.activePrinciples,
 		};
 		console.log(product);
-		fetch(server_url + '/product/' + this.props.match.params.id, {
-		  method: 'put',
+		fetch(server_url + '/product', {
+		  method: 'post',
 		  headers: {
 		    'Content-Type': 'application/json'
 		  },
@@ -118,21 +165,23 @@ class EditProduct extends React.Component{
 		})
 		.then(res => res.json())
 		.then(res => {
-		  console.log(res);
-		  this.props.history.push('/');
+		  console.log(res,123);
+		  this.props.onAdd(res)
 		})
 		.catch(err => {
 		  console.error(err);
 		});
+		this.props.handleClose()
 	}
-
-	render(){
-		const { classes } = this.props;
-		console.log(this.state)
-		return(
-			<div>
-				<main className={classes.main}>
-				<Paper className={classes.paper}>
+  render(){
+    const { classes } = this.props;
+    return (
+        <Dialog
+          onClose={this.props.handleClose}
+          aria-labelledby="customized-dialog-title"
+          open={this.props.open}
+        >
+          <DialogContent>
 					<Avatar className={classes.avatar}>
 						<CloudUploadOutlineIcon />
 					</Avatar>
@@ -155,8 +204,8 @@ class EditProduct extends React.Component{
 			              type="code"
 			              autoComplete='off'
 			              id="code"
-			              value={this.state.code}
 			              onChange={this.handleInputChange}
+			              value={this.state.code}
 			              />
 			            </FormControl>
 			            <div className={classes.list}>
@@ -271,7 +320,6 @@ class EditProduct extends React.Component{
 			              autoComplete='off'
 			              multiline={true} 
 			              id="info"
-			              value={this.state.info}
 			              onChange={this.handleInputChange}
 			              />
 			            </FormControl>
@@ -286,64 +334,19 @@ class EditProduct extends React.Component{
 			              Subir
 			            </Button>
 			        </form>
-        		</Paper>
-        		</main>
-			</div>
-		)
-	}
+          </DialogContent>
+        </Dialog>
+  );
+
+  }  
 }
 
-const styles = theme => ({
-	main: {
-	    width: 'auto',
-	    display: 'block', // Fix IE 11 issue.
-	    marginLeft: theme.spacing.unit * 3,
-	    marginRight: theme.spacing.unit * 3,
-	    [theme.breakpoints.down('sm')]: {
-	      width: '95%',
-	      marginLeft: 'auto',
-	      marginRight: 'auto',
-	    },
-	    [theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2)]: {
-	      width: 400,
-	      marginLeft: 'auto',
-	      marginRight: 'auto',
-	    },
-	},
-	paper: {
-	    marginTop: '5em',
-	    marginBottom: '2em',
-	    display: 'flex',
-	    flexDirection: 'column',
-	    alignItems: 'center',
-	    padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing.unit * 3}px`,
-	},
-	avatar: {
-	    margin: theme.spacing.unit,
-	    backgroundColor: theme.palette.primary.main,
-	},
-	form: {
-	    width: '100%', // Fix IE 11 issue.
-	    marginTop: theme.spacing.unit,
-	},
-	inputInList: {
-		// width: '85%'
-		// display: 'flex',
-		width: '80%'
-	},
-	list: {
-		display: 'flex',
-		flexDirection: 'column',
-	},
-	listInput: {
-		display: 'flex',
-		flexDirection: 'row',
-		flexWrap: 'nowrap',
-		// width: 'inherit'
-	},
-	submit: {
-	    marginTop: theme.spacing.unit * 3,
-	},
-});
 
-export default  withStyles(styles)(EditProduct);
+
+AddProductModal.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+
+
+export default withStyles(styles)(AddProductModal);
