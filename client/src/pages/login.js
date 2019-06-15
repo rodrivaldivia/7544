@@ -11,6 +11,7 @@ import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import CloudUploadOutlineIcon from '@material-ui/icons/CloudUpload';
 import config from '../config/config';
+var authToken = require('..//providers/authToken');
 
 const server_url = config.server_url;
 
@@ -34,7 +35,7 @@ class Login extends React.Component{
 		    "username": this.state.username,
 		    "password": this.state.password,
 		};
-		fetch(server_url + '/api/authenticate', {
+		fetch(server_url + '/user/authenticate', {
 		  method: 'post',
 		  headers: {
 		    'Content-Type': 'application/json'
@@ -55,7 +56,6 @@ class Login extends React.Component{
 		})
 		.catch(err => {
 		  console.error(err);
-		  this.openSnackbar();
 		});
 	}
 
@@ -104,13 +104,6 @@ class Login extends React.Component{
 			        </form>
         		</Paper>
         		</main>
-        		<Anime opacity={[0, 1]}
-					translateX={100}
-					duration={3000}
-					loop={true}
-				>
-					<div className={classes.test} />
-				</Anime>
 			</div>
 		)
 	}
@@ -137,7 +130,7 @@ const styles = theme => ({
 	    },
 	},
 	container: {
-		margin: 20,
+		margin: 40,
 	},
 	paper: {
 	    marginTop: theme.spacing.unit * 8,

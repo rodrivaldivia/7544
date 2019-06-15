@@ -13,6 +13,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormGroup from '@material-ui/core/FormGroup';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
+var authToken = require('..//providers/authToken');
 
 const styles = {
   grow: {
@@ -42,7 +43,22 @@ class MenuAppBar extends React.Component {
     this.setState({ anchorEl: null });
   };
 
+  closeSession = () => {
+    authToken.removeToken();
+  };
+
+
   render() {
+  function AdminPanel(props) {
+    if(authToken.getToken() === 'admin')
+      return (
+        <Link to="/backoffice">
+          <MenuItem>Backoffice</MenuItem>
+        </Link>
+      );
+    else
+      return null;
+  }
     const { classes } = this.props;
     const { auth, anchorEl } = this.state;
     const open = Boolean(anchorEl);
@@ -83,9 +99,9 @@ class MenuAppBar extends React.Component {
                 <Link to="/">
                   <MenuItem>Inicio</MenuItem>
                 </Link>
-                <MenuItem onClick={this.handleClose}>Cerrar Sesión</MenuItem>
-                <Link to="/subir/producto">
-                  <MenuItem>Subir</MenuItem>
+                <AdminPanel/>
+                <Link to="/login">
+                  <MenuItem onClick={this.closeSession}>Cerrar Sesión</MenuItem>
                 </Link>
               </Menu>
             </div>

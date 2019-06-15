@@ -2,21 +2,22 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 var authToken = require('../providers/authToken');
 
-export default function withAuth(ComponentToProtect) {
+export default function withAdmin(ComponentToProtect) {
   return class extends Component {
-    constructor() {
+    constructor() { 
       super();
       this.state = {
         loading: true,
         redirect: false,
+        
       };
     }
     componentDidMount() {
       console.log(authToken.getToken());
-      if(authToken.getToken() === null)
-        this.setState({ loading: false, redirect: true });
-      else
+      if(authToken.getToken() === 'admin')
         this.setState({ loading: false });
+      else
+        this.setState({ loading: false, redirect: true });
       // fetch('localhost:10010/api/checkToken',{
       //   headers: {
       //   'Authorization': authToken.getToken(),
