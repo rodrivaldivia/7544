@@ -5,6 +5,7 @@ import Card from '@material-ui/core/Card';
 import IconButton from '@material-ui/core/IconButton';
 import AddBox from '@material-ui/icons/AddBox';
 import TabNav from '../components/tabNav';
+import AddPrincipleModal from '../components/addPrincipleModal';
 import SearchAppBar from '../components/searchAppBar';
 import ProductCard from '../components/productCard';
 import PrincipleCard from '../components/principleCard';
@@ -28,6 +29,7 @@ class Backoffice extends Component{
 				renderer: this.renderActivePrinciplesBackoffice.bind(this)
 			}],
 			products: [],
+			activePrinciples: [],
 			search: '',
 			addProductShow:false,
 			addPrincipleShow:false,
@@ -46,6 +48,7 @@ class Backoffice extends Component{
 		.then(data => {
 			// var newprod = {name: data.products[0].name}
 			// data.products.push(product)
+			console.log(data.products)
 			this.setState({ 
 				products : data.products,
 			});
@@ -69,7 +72,8 @@ class Backoffice extends Component{
 		})
 		.then(data => {
 			// var newprod = {name: data.products[0].name}
-			// data.products.push(product)
+			// data.products.push(product
+			console.log(data.principles)
 			this.setState({ 
 				activePrinciples : data.principles,
 			});
@@ -80,11 +84,15 @@ class Backoffice extends Component{
 	}
 
 	handleProductAdd(product){
-		console.log("HOLAA", product)
 		let newList = this.state.products
 		newList.unshift(product)
-		console.log(newList)
 		this.setState({ products : newList})
+	}
+	handlePrincipleAdd(principle){
+		let newList = this.state.activePrinciples
+		newList.unshift(principle)
+		console.log(newList)
+		this.setState({ activePrinciples : newList})
 	}
 	componentDidMount(){
 		this.getProducts();
@@ -93,6 +101,9 @@ class Backoffice extends Component{
 
 	closeProductDialog(){
     	this.setState({ addProductShow: false });
+	}
+	closePrincipleDialog(){
+    	this.setState({ addPrincipleShow: false });
 	}
 	handleTextChange= name => event => {
 	    this.setState({ [name] : event.target.value });
@@ -154,7 +165,7 @@ class Backoffice extends Component{
 							<Typography variant="h3">
 								Principios Activos
 							</Typography>
-							<IconButton href="/subir/principio">
+							<IconButton onClick={() => this.setState({addPrincipleShow: true})}>
 								<AddBox color="primary"/>
 							</IconButton>
 						</div>
@@ -171,6 +182,7 @@ class Backoffice extends Component{
 							})
 						}
 			</div>
+			<AddPrincipleModal open={this.state.addPrincipleShow} onAdd={this.handlePrincipleAdd.bind(this)} handleClose={this.closePrincipleDialog.bind(this)}/>
 			</div>
 		)
 	}

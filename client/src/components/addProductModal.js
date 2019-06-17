@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Autosuggest from 'react-autosuggest';
 import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import Dialog from '@material-ui/core/Dialog';
@@ -41,6 +42,7 @@ const styles = {
     color: 'tomato'
   }
 };
+
 
 const DialogTitle = withStyles(theme => ({
   root: {
@@ -95,23 +97,83 @@ class AddProductModal extends React.Component {
 			img: [],
 			format: [],
 			activePrinciples: [],
+			selectedPrinciples: []
 		}
 	}
 
+	setPrinciples(){
+		fetch(server_url + '/principles', {
+			method: 'get',
+			headers: {
+				'Content-Type':'application/json',
+				// 'Authorization': authToken.getToken(),
+			}
+		})
+		.then(response => {
+			return response.json()
+		})
+		.then(data => {
+			// var newprod = {name: data.products[0].name}
+			// data.products.push(product
+			console.log(data.principles)
+			this.setState({ 
+				principios : data.principles,
+			});
+		})
+		.catch((err) => {
+			console.log(err)
+		});
+	}
 
+	setActivePrinciple(id, principle){
+		console.log("HOLA", this.state)
+		const { activePrinciples, selectedPrinciples} = this.state
+		let auxPrinc = activePrinciples
+		let auxIds = selectedPrinciples
+		auxPrinc[id]=principle.name
+		auxIds[id]=principle.id
+		this.setState({ activePrinciples: auxPrinc, selectedPrinciples: auxIds,principlesSuggestions: false})
+	}
+
+	renderSuggestions(idx){
+		if(idx == this.state.selectedForm && this.state.principlesSuggestions)
+			return(
+				<Paper>
+				<List component="nav" aria-label="Secondary mailbox folders">
+					{
+						this.state.principios.map((principio,i) => {
+							if(principio.name.toLowerCase().includes(this.state.activePrinciples[idx].toLowerCase()))
+						        return(
+						        	<ListItem key={i} onClick={() => {this.setActivePrinciple(idx, principio)}} button>
+						        					          <ListItemText  primary={principio.name} />
+	    					        </ListItem>
+	    					        )
+						})
+					}
+			      </List>
+				</Paper>
+			)
+		return <div/>
+	}
 	componentDidMount(){
+		this.setPrinciples()
 		if(this.props.product){
 			const { product } = this.props
-			let imageLinks = []
+			let principlesNames = []
+			let principlesId = []
+			product.ActivePrinciples.forEach(principle => {
+				principlesNames.push(principle.name)
+				principlesId.push(principle.id)
+			})
 			this.setState({
 				name: product.name,
 				code: product.code,
-				info: product.info,
+				info: product.description,
 				img: product.images,
 				format: product.formats,
-				activePrinciples: ['Ninguno']
+				activePrinciples: principlesNames,
+				selectedPrinciples: principlesId
 			})
-			console.log(product)
 		}
 	}
 	
@@ -139,23 +201,61 @@ class AddProductModal extends React.Component {
 		});
 	};
 
-	handleRemoveList = (idx, name) => (event) => {
-		this.setState({
-		  [name]: this.state[name].filter((s, sidx) => idx !== sidx)
-		});
+	handleRemoveList = (idx, nameList) => (event) => {
+		nameList.forEach(name => {
+			this.setState({
+			  [name]: this.state[name].filter((s, sidx) => idx !== sidx)
+			});
+		})
 	};
-	
-	onSubmit = (event) => {
-		event.preventDefault();
+	editOld(){
+		console.log("HOLA HOLA PUT")
+		let product = {
+			id: this.props.product.id,
+		    name: this.state.name,
+			code: this.state.code,
+			info: this.state.info,
+			img:  this.state.img,
+			format: this.state.format,
+			activePrinciples: this.state.selectedPrinciples,
+		};
+		console.log(product);
+		fetch(server_url + '/product/'+this.props.product.id, {
+		  method: 'put',
+		  headers: {
+		    'Content-Type': 'application/json'
+		  },
+		  body: JSON.stringify(product),
+		})
+		.then(res => res.json())
+		.then(res => {
+		  console.log(res,123);
+		  this.props.onAdd(res)
+		})
+		.catch(err => {
+		  console.error(err);
+		});
+
+	}
+	createNew(){
 		let product = {
 		    name: this.state.name,
 			code: this.state.code,
 			info: this.state.info,
 			img:  this.state.img,
 			format: this.state.format,
-			activePrinciples: this.state.activePrinciples,
+			activePrinciples: this.state.selectedPrinciples,
 		};
 		console.log(product);
+		this.setState({
+					name: '',
+					code: '',
+					info: '',
+					img: [],
+					format: [],
+					activePrinciples: [],
+					selectedPrinciples: []
+				})
 		fetch(server_url + '/product', {
 		  method: 'post',
 		  headers: {
@@ -171,6 +271,15 @@ class AddProductModal extends React.Component {
 		.catch(err => {
 		  console.error(err);
 		});
+
+	}
+	onSubmit = (event) => {
+		event.preventDefault();
+		console.log("HOLA ON SUBMIT")
+		if(this.props.product)
+			this.editOld()
+		else
+			this.createNew()
 		this.props.handleClose()
 	}
   render(){
@@ -223,7 +332,7 @@ class AddProductModal extends React.Component {
 						            />
 						            <IconButton className={classes.iconButton}
 						              type="button"
-						              onClick={this.handleRemoveList(idx,'format')}
+						              onClick={this.handleRemoveList(idx,['format'])}
 						              className="small"
 						            >
 								        <RemoveCircleIcon />
@@ -258,7 +367,7 @@ class AddProductModal extends React.Component {
 						            />
 						            <IconButton className={classes.iconButton}
 						              type="button"
-						              onClick={this.handleRemoveList(idx, 'img')}
+						              onClick={this.handleRemoveList(idx, ['img'])}
 						              className="small"
 						            >
 								        <RemoveCircleIcon />
@@ -280,24 +389,27 @@ class AddProductModal extends React.Component {
 
 			            <div className={classes.list}>
 				            {this.state.activePrinciples.map((img, idx) => (
-					          	<FormControl margin="normal">
-					          	<div className="listInput">
+					          	<FormControl margin="normal" >
+					          	<div className="listInput" >
 				              		<InputLabel htmlFor="text">Principio activo {idx + 1}</InputLabel>
 						            <InputBase
 						              className={classes.inputInList}
 						              name="activePrinciples"
 						              autoComplete='off'
 						              placeholder={`Principio activo ${idx + 1}`}
+						              onFocus={() => {this.setState({ selectedForm : idx, principlesSuggestions: true})}}
+						              
 						              value={img}
 						              onChange={this.handleInputListChange(idx)}
 						            />
 						            <IconButton className={classes.iconButton}
 						              type="button"
-						              onClick={this.handleRemoveList(idx, 'activePrinciples')}
+						              onClick={this.handleRemoveList(idx, ['activePrinciples','selectedPrinciples'])}
 						              className="small"
 						            >
 								        <RemoveCircleIcon />
 								    </IconButton>
+								    {this.renderSuggestions(idx)}
 					          	</div>
 					        	</FormControl>
 					        ))}
@@ -318,6 +430,7 @@ class AddProductModal extends React.Component {
 			              <Input name="info"
 			              type="info"
 			              autoComplete='off'
+			              value={this.state.info}
 			              multiline={true} 
 			              id="info"
 			              onChange={this.handleInputChange}
