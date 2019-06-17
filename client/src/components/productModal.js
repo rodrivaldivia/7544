@@ -198,7 +198,11 @@ class ProductModal extends React.Component {
               </IconButton>
             </div>
             <Typography variant="h4" gutterBottom>
-             Principios activos: {this.props.product.activePrinciples}
+             Principios activos: {
+              this.props.product.ActivePrinciples.map((activePrinciple, idx) => {
+                return (<Typography variant="body1" >{activePrinciple.name}</Typography>)
+              })
+             }
            </Typography>
            <Typography variant="body1" >
              {this.props.product.description}

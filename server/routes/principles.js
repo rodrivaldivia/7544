@@ -9,9 +9,7 @@ const activePrinciplesRepo = require('../repositories/activePrinciples');
 
 router.get('/:id',function(req, res){
 	activePrinciplesRepo.getActivePrinciple(req.params.id).then(activePrinciple => {
-		res.json({
-			principle
-		})
+		res.json(principle)
 	}).catch(err => {
 		res.send(err)
 	})
@@ -32,14 +30,13 @@ router.post('/', (req, res, next) => {
 		res.send("No name or information")
 	}
 	activePrinciplesRepo.createActivePrinciple(name, information).then(principle => {
-		res.json({
-			principle
-		})
+		res.json(principle)
 	})
 })
 
 router.put('/:id', (req, res, next) => {
 	const { name, information } = req.body
+	console.log(req.body)
 	activePrinciplesRepo.updateActivePrinciple(req.params.id,name, information).then(principle => {
 		res.json({
 			principle

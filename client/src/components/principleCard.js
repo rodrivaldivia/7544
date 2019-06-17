@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import ProductModal from './productModal'
 import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
+import AddPrincipleModal from '../components/addPrincipleModal';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
@@ -16,7 +17,13 @@ const server_url = config.server_url;
 class PrincipleCard extends React.Component {
   constructor(props){
     super(props);
-    this.state = { show: false };
+    console.log(props)
+    const { principle } = props
+    this.state = { 
+      show: false,
+      name: principle.name,
+      info : principle.information
+    };
   }
   closeDialog(){
     this.setState({ show: false });
@@ -25,6 +32,7 @@ class PrincipleCard extends React.Component {
   openDialog = () => {
     this.setState({show: true})
   }
+
 
   deleteProduct(){
     console.log(this.props)
@@ -60,13 +68,14 @@ class PrincipleCard extends React.Component {
               </Typography>
             </CardContent>
           </CardActionArea>
-          <Button  color="primary">
+          <Button onClick={() => this.setState({ show: true})} color="primary">
             Editar
           </Button>
           <Button onClick={this.deleteProduct.bind(this)} color="inherit">
               Borrar
           </Button>
         </Card>
+        <AddPrincipleModal open={this.state.show} principle={this.props.principle} handleClose={this.closeDialog.bind(this)}/>
       </div>
   );
   }  

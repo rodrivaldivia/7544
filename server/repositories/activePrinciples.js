@@ -22,6 +22,15 @@ class ActivePrinciplesRepo {
 		})
 	}
 
+	getPrinciplesByList(list){
+		return ActivePrinciples.findAll({
+			where:{
+				id: list
+			}
+		})
+	}
+
+
 	getAllActivePrinciples(){
 		return ActivePrinciples.findAll()
 	};
@@ -36,12 +45,13 @@ class ActivePrinciplesRepo {
 	updateActivePrinciple(id,name, information){
 		let nameField = (name)? 'name' : undefined
 		let infoField = (information)? 'information' : undefined
+		console.log(information, name, nameField, infoField, id)
 		return ActivePrinciples.findOne({
 			where: {
 				id: id
 			}
 		}).then(activePrinciple => {
-			return activePrinciple.update({ name: name},{ fields: [nameField, infoField]})
+			return activePrinciple.update({ name: name, information: information},{ fields: [nameField, infoField]})
 		})
 	};
 

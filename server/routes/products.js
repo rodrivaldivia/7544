@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const productsRepository = require('../repositories/products');
 const imagesRepository = require('../repositories/images');
-const activePrinciplesRepo = require('../repositories/activePrinciples');
+const activePrinciplesRepository = require('../repositories/activePrinciples');
 const formatsRepository = require('../repositories/formats');
 
 /* GET users listing. */
@@ -40,28 +40,37 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/', function(req, res){
-	let name = req.body.name;
-	let code = req.body.code;
-	let info = req.body.info;
+	let {name, code, info, activePrinciples} = req.body
 	let images = req.body.img;
 	let formats = req.body.format;
 	productsRepository.addNewProduct(name, code, info).then((product) => {
 		var productId = product.id;
-		console.log(product.id, images[0]);
 		if(images)
 			imagesRepository.addNewImage(productId, images).then(images => {
 				formatsRepository.addNewFormat(productId, formats).then(formats=> {
-					let imageLinks = []
-					let formatsInfo = []
-					images.forEach(image => {
-						imageLinks.push(image.link)
+					productsRepository.linkProductAndPrinciple(productId,activePrinciples).then(principles => {
+						activePrinciplesRepository.getPrinciplesByList(activePrinciples).then(principles => {
+							let imageLinks = []
+							let formatsInfo = []
+							let principlesList = []
+							images.forEach(image => {
+								imageLinks.push(image.link)
+							})
+							formats.forEach(format => {
+								formatsInfo.push(format.info)
+							})
+							principles.forEach(principle => {
+								if(activePrinciples.includes(principle.id))
+									principlesList.push(principle)
+							})
+							product.dataValues.images = imageLinks
+							product.dataValues.formats = formatsInfo
+							product.dataValues.ActivePrinciples = principlesList
+							res.json(product)
+
+						})
+
 					})
-					formats.forEach(format => {
-						formatsInfo.push(format.info)
-					})
-					product.dataValues.images = imageLinks
-					product.dataValues.formats = formatsInfo
-					res.json(product)
 				})
 			})
 	});
@@ -69,10 +78,8 @@ router.post('/', function(req, res){
 
 router.put('/:id',function(req, res){
 	let productId = req.params.id;
-	let code = req.body.code;
-	let info = req.body.info;
-	let name = req.body.name;
-	productsRepository.changeProductData(productId, name, code, info).then((product) => {
+	let { code, info, name, activePrinciples } = req.body
+	productsRepository.changeProductData(productId, name, code, info, activePrinciples).then((product) => {
 		res.json(product)
 	})
 
