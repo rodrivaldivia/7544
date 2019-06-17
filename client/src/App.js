@@ -9,6 +9,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import MenuAppBar from './components/menuAppBar'
 import Home from './pages/home';
 import About from './pages/about';
+import Landing from './pages/landing';
 import Contact from './pages/contact';
 import Login from './pages/login';
 import Backoffice from './pages/backoffice';
@@ -45,10 +46,11 @@ export default class App extends Component {
           <Router>
 
           <MenuAppBar/>
-            <Route path="/" exact={true} component={withAuth(Home)} />
+            <Route path="/productos" exact={true} component={withAuth(Home)} />
             {/*<Route path="/" exact component={Home} />*/}
             <Route path="/login" exact component={Login} />
             <Route path="/acerca" exact component={About} />
+            <Route path="/" exact component={Landing} />
             <Route path="/contacto" exact component={Contact} />
             <Route path="/subir/producto"  component={withAdmin(AddProduct)} />
             <Route path="/subir/principio"  component={withAdmin(AddPrinciple)} />
