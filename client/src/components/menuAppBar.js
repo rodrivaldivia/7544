@@ -99,6 +99,12 @@ class MenuAppBar extends React.Component {
                 <Link to="/">
                   <MenuItem>Inicio</MenuItem>
                 </Link>
+                <Link to="/acerca">
+                  <MenuItem>Empresa</MenuItem>
+                </Link>
+                <Link to="/contacto">
+                  <MenuItem>Contacto</MenuItem>
+                </Link>
                 <AdminPanel/>
                 <Link to="/login">
                   <MenuItem onClick={this.closeSession}>Cerrar Sesión</MenuItem>
