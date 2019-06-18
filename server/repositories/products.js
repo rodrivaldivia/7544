@@ -33,7 +33,7 @@ class ProductsRepo {
 		});
 	};
 
-	changeProductData( productId, name, code, info, activePrinciples){
+	changeProductData( productId, name, code, info, activePrinciples, images, formats){
 		let _self = this
 		return Products.findOne({
 			where: {
@@ -41,7 +41,11 @@ class ProductsRepo {
 			},
 			include:[{
 				model: ActivePrinciples
-			}]
+			},{
+				model: Images
+			},{
+				model: Formats
+			},]
 		}).then(product => {
 			let newData = {
 				name: name,
@@ -49,22 +53,74 @@ class ProductsRepo {
 				description: info
 			}
 			product.update(newData).then(product => {
-				let removedList = []
+				let removedPrincipleList = []
+				let removedPhotoList = []
+				let removedFormatList = []
+				product.Images.forEach(image => {
+					if(images.includes(image.link)){
+						images.splice(images.indexOf(image.link),1)
+					}else{
+						removedPhotoList.push(image.id)
+					}
+				})
+				product.Formats.forEach(format => {
+					if(formats.includes(format.info)){
+						formats.splice(formats.indexOf(format.info),1)
+					}else{
+						removedFormatList.push(format.id)
+					}
+				})
 				product.ActivePrinciples.forEach(principle => {
-					console.log(activePrinciples)
 					if(activePrinciples.includes(principle.id)){
 						activePrinciples.splice(activePrinciples.indexOf(principle.id),1)
 					}else{
-						removedList.push(principle.id)
+						removedPrincipleList.push(principle.id)
 					}
 				})
-				console.log(activePrinciples)
-				return _self.updateLinks(product.id, activePrinciples, removedList).then(data => {
-					return _self.getProduct(product.id)
+				return _self.updateLinks(product.id, activePrinciples, removedPrincipleList).then(data => {
+					return _self.updatePhotos(product.id, images, removedPhotoList).then(data => {
+						return _self.updateFormats(product.id, formats, removedFormatList).then(data => {
+							return _self.getProduct(product.id)
+						})
+					})
 				})
 			})
 		})
 
+	}
+
+	updatePhotos(productId, newList, removedList){
+		let newRegisters = []
+		newList.forEach(link => {
+			newRegisters.push({
+				productId,
+				link
+			})
+		})
+		Images.destroy({
+			where:{
+				link: removedList,
+				productId
+			}
+		})
+		return Images.bulkCreate(newRegisters)
+	}
+
+	updateFormats(productId, newList, removedList){
+		let newRegisters = []
+		newList.forEach(info => {
+			newRegisters.push({
+				productId,
+				info
+			})
+		})
+		Formats.destroy({
+			where:{
+				info: removedList,
+				productId
+			}
+		})
+		return Formats.bulkCreate(newRegisters)
 	}
 
 	updateLinks(productId, newList, removedList){
@@ -75,7 +131,6 @@ class ProductsRepo {
 				activePrincipleId
 			})
 		})
-		console.log(removedList)
 		ProductActivePrinciple.destroy({
 			where:{
 				activePrincipleId: removedList,

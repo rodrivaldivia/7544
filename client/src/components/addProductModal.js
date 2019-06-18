@@ -209,7 +209,6 @@ class AddProductModal extends React.Component {
 		})
 	};
 	editOld(){
-		console.log("HOLA HOLA PUT")
 		let product = {
 			id: this.props.product.id,
 		    name: this.state.name,
