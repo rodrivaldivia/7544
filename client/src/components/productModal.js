@@ -213,8 +213,8 @@ class ProductModal extends React.Component {
                 <KeyboardArrowRightIcon style={styles.arrowIcon}/>
               </IconButton>
             </div>
-            <Typography variant="h4" gutterBottom>
-             Principios activos: {
+            <Typography variant="body1" gutterBottom>
+            Principios activos: {
               this.props.product.ActivePrinciples.map((activePrinciple, idx) => {
                 return (
                   <Button onClick={() => this.openPrincipleModal(activePrinciple)} color="primary">
@@ -229,10 +229,14 @@ class ProductModal extends React.Component {
              {this.props.product.description}
            </Typography>
            <Typography variant="overline">
-             {this.props.product.format}
+            Formats:{
+              this.props.product.formats.map((format, idx) => {
+                return (<Typography variant="overline" >{format}</Typography>)
+              })
+             }
            </Typography>
            <Typography variant="button">
-             {this.props.product.code}
+             Code: {this.props.product.code}
            </Typography>
 
           </DialogContent>
