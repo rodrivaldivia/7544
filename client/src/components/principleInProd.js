@@ -7,7 +7,6 @@ import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import MuiDialogContent from '@material-ui/core/DialogContent';
 import MuiDialogActions from '@material-ui/core/DialogActions';
 import IconButton from '@material-ui/core/IconButton';
-import AddProductModal from './addProductModal';
 import CloseIcon from '@material-ui/icons/Close';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft';
@@ -21,7 +20,6 @@ import ImageIcon from '@material-ui/icons/Image';
 import WorkIcon from '@material-ui/icons/Work';
 import BeachAccessIcon from '@material-ui/icons/BeachAccess';
 import config from '../config/config';
-import PrincipleModal from './principleInProd'
 const server_url = config.server_url;
 
 const styles = {
@@ -44,16 +42,6 @@ const styles = {
   },
   arrowIcon:{
     height: '100%'
-  },
-  productTitle:{
-    marginRight:'15px',
-    marginLeft: '3px'
-  },
-  productDialog:{
-    width: '80%'
-  },
-  productContent:{
-    margin: '5px 15px'
   }
 };
 
@@ -99,21 +87,18 @@ const DialogActions = withStyles(theme => ({
 }))(MuiDialogActions);
 
 
-class ProductModal extends React.Component {
+class PrincipleModal extends React.Component {
   constructor(props){
     super(props);
     const { product } = props
+    console.log(product)
     this.state = {
       selectedImage: (product.images.length)? product.images[0] : "https://5.imimg.com/data5/RE/SD/MY-3773531/pharmaceutical-product-500x500.jpg",
-      selectedIndex: 0,
-      editProductShow: false,
-      showPrinciple: false,
-      principle: {
-        images: []
-      }
+      selectedIndex: 0
     }
 
   }
+
   deleteProduct(){
     fetch(server_url + '/product/' + this.props.product.id, {
       method: 'delete',
@@ -132,15 +117,6 @@ class ProductModal extends React.Component {
     });
   } 
 
-  closeEditDialog(){
-    this.setState({editProductShow: false})
-  }
-  closeDialog(){
-    this.setState({ showPrinciple: false })
-  }
-  handleProductEdit(){
-    console.log('hola')
-  }
   handleNextPicture(){
 
     if(this.state.selectedIndex < this.props.product.images.length-1){
@@ -152,14 +128,6 @@ class ProductModal extends React.Component {
       })
     }
 
-  }
-
-  openPrincipleModal(activePrinciple){
-    console.log(activePrinciple)
-    this.setState({ 
-      showPrinciple: true,
-      principle: activePrinciple,
-    });
   }
 
   renderImage(){
@@ -178,70 +146,42 @@ class ProductModal extends React.Component {
     if(this.props.editable)
       return(
         <div>
-          <Button onClick={() => this.setState({editProductShow: true})} color="secondary">
+          <Button href={'/editar/' + this.props.product.id } color="secondary">
             Editar
           </Button>
           <Button onClick={this.deleteProduct.bind(this)} className={classes.buttonDelete}>
-            Borrar
+              Borrar
           </Button>
         </div>
       )
     return(
       <Button onClick={this.props.handleClose} color="primary">
-          Ok
+              Ok
       </Button>
     )
   }
   render(){
     const { classes } = this.props;
+    console.log(this.props.product)
     return (
         <Dialog
           onClose={this.props.handleClose}
           aria-labelledby="customized-dialog-title"
           open={this.props.open}
         >
-          <DialogTitle id="customized-dialog-title" style={styles.productTitle} onClose={this.props.handleClose}>
-            {this.props.product.name}
+          <DialogTitle id="customized-dialog-title" onClose={this.props.handleClose}>
+            Principio: {this.props.product.name}
           </DialogTitle>
-          <DialogContent style={styles.productContent}>
-            <div style={styles.imageContainer}>
-              <IconButton onClick={this.handleBackPicture.bind(this)}>
-                <KeyboardArrowLeftIcon style={styles.arrowIcon}/>
-              </IconButton>
-                {this.renderImage()}
-              <IconButton onClick={this.handleNextPicture.bind(this)}>
-                <KeyboardArrowRightIcon style={styles.arrowIcon}/>
-              </IconButton>
-            </div>
+          <DialogContent>
+            
             <Typography variant="h4" gutterBottom>
-             Principios activos: {
-              this.props.product.ActivePrinciples.map((activePrinciple, idx) => {
-                return (
-                  <Button onClick={() => this.openPrincipleModal(activePrinciple)} color="primary">
-                      {activePrinciple.name}
-                  </Button>
-                  
-                )
-              })
-             }
+             Descripcion: {this.props.product.information}
            </Typography>
-           <Typography variant="body1" >
-             {this.props.product.description}
-           </Typography>
-           <Typography variant="overline">
-             {this.props.product.format}
-           </Typography>
-           <Typography variant="button">
-             {this.props.product.code}
-           </Typography>
-
           </DialogContent>
           <DialogActions>
           {this.renderEdit(classes)}
 
           </DialogActions>
-          <AddProductModal open={this.state.editProductShow} product={this.props.product} onAdd={this.handleProductEdit.bind(this)} handleClose={this.closeEditDialog.bind(this)}/>
-        <PrincipleModal open={this.state.showPrinciple} product={this.state.principle} handleClose={this.closeDialog.bind(this)}/>
         </Dialog>
   );
 
@@ -249,10 +189,10 @@ class ProductModal extends React.Component {
 }
         
 
-ProductModal.propTypes = {
+PrincipleModal.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
 
 
-export default withStyles(styles)(ProductModal);
+export default withStyles(styles)(PrincipleModal);

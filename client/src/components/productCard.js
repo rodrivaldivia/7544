@@ -14,15 +14,18 @@ import IconButton from '@material-ui/core/IconButton';
 class ProductCard extends React.Component {
   constructor(props){
     super(props);
-    this.state = { show: false };
+    this.state = { show: false};
     this.state.mainImage = (props.product.images.length)? props.product.images[0] : "https://5.imimg.com/data5/RE/SD/MY-3773531/pharmaceutical-product-500x500.jpg"
   }
   closeDialog(){
-    this.setState({ show: false });
+    this.setState({ show: false, showPrinciple: false });
   }
 
   openDialog = () => {
     this.setState({show: true})
+  }
+  openPrincipleDialog = () => {
+    this.setState({showPrinciple: true})
   }
 
 

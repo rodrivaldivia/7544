@@ -96,7 +96,7 @@ class MenuAppBar extends React.Component {
                 open={open}
                 onClose={this.handleClose}
               >
-                <Link to="/">
+                <Link to="/productos">
                   <MenuItem>Inicio</MenuItem>
                 </Link>
                 <Link to="/acerca">

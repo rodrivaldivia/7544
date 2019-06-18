@@ -48,7 +48,7 @@ class Login extends React.Component{
 		  if (res.result === 'OK') {
 		    console.log(res.token);
 		    authToken.setToken(res.token);
-		    this.props.history.push('/');
+		    this.props.history.push('/productos');
 		  } else {
 		    const error = new Error(res.error);
 		    throw error;

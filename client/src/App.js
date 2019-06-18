@@ -48,14 +48,15 @@ export default class App extends Component {
           <MenuAppBar/>
             <Route path="/productos" exact={true} component={withAuth(Home)} />
             {/*<Route path="/" exact component={Home} />*/}
-            <Route path="/login" exact component={Login} />
-            <Route path="/acerca" exact component={About} />
-            <Route path="/" exact component={Landing} />
-            <Route path="/contacto" exact component={Contact} />
+            <Route path="/login" exact={true} component={Login} />
+            <Route path="/acerca" exact={true} component={About} />
+            <Route path="/" exact={true} component={Landing} />
+            <Route path="/contacto" exact={true} component={Contact} />
             <Route path="/subir/producto"  component={withAdmin(AddProduct)} />
             <Route path="/subir/principio"  component={withAdmin(AddPrinciple)} />
             <Route path="/backoffice"  component={withAdmin(Backoffice)} />
             <Route path="/editar/:id"  component={withAdmin(EditProduct)} />
+            {/*<Redirect to="/" />*/}
           </Router>
           </MuiThemeProvider>
       </div>
